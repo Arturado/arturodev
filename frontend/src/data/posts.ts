@@ -14,7 +14,7 @@ const API = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://lo
 
 export async function getPosts(): Promise<Post[]> {
   try {
-    const res = await fetch(`${API}/posts`, { next: { revalidate: 60 } });
+    const res = await fetch(`${API}/posts`, { cache: 'no-store' });
     if (!res.ok) return [];
     return res.json();
   } catch {
@@ -24,10 +24,14 @@ export async function getPosts(): Promise<Post[]> {
 
 export async function getPost(slug: string): Promise<Post | null> {
   try {
-    const res = await fetch(`${API}/posts/${slug}`, { next: { revalidate: 60 } });
-    if (!res.ok) return null;
-    return res.json();
-  } catch {
+    console.log('Fetching post from:', `${API}/posts/${slug}`);
+    const res = await fetch(`${API}/posts/${slug}`, { cache: 'no-store' });
+    console.log('Response status:', res.status);
+    const text = await res.text();
+    console.log('Response text:', text.slice(0, 100));
+    return JSON.parse(text);
+  } catch (err) {
+    console.error('Error fetching post:', err);
     return null;
   }
 }
