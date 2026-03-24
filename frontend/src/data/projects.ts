@@ -12,11 +12,11 @@ export type Project = {
   published: boolean;
 };
 
+const API = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+
 export async function getProjects(): Promise<Project[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects`, {
-      next: { revalidate: 60 },
-    });
+    const res = await fetch(`${API}/projects`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     return res.json();
   } catch {
@@ -26,9 +26,7 @@ export async function getProjects(): Promise<Project[]> {
 
 export async function getProject(slug: string): Promise<Project | null> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${slug}`, {
-      next: { revalidate: 60 },
-    });
+    const res = await fetch(`${API}/projects/${slug}`, { next: { revalidate: 60 } });
     if (!res.ok) return null;
     return res.json();
   } catch {

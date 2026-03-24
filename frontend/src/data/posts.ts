@@ -10,11 +10,11 @@ export type Post = {
   createdAt: string;
 };
 
+const API = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+
 export async function getPosts(): Promise<Post[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`, {
-      next: { revalidate: 60 },
-    });
+    const res = await fetch(`${API}/posts`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     return res.json();
   } catch {
@@ -24,9 +24,7 @@ export async function getPosts(): Promise<Post[]> {
 
 export async function getPost(slug: string): Promise<Post | null> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${slug}`, {
-      next: { revalidate: 60 },
-    });
+    const res = await fetch(`${API}/posts/${slug}`, { next: { revalidate: 60 } });
     if (!res.ok) return null;
     return res.json();
   } catch {
