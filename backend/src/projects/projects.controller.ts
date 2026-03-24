@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('projects')
 export class ProjectsController {
@@ -16,16 +17,19 @@ export class ProjectsController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   create(@Body() body: any) {
     return this.projectsService.create(body);
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard)
   update(@Param('id') id: string, @Body() body: any) {
     return this.projectsService.update(id, body);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.projectsService.remove(id);
   }
