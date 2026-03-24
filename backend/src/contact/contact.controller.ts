@@ -12,7 +12,6 @@ export class ContactController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   create(@Body() body: any) {
     return this.contactService.create(body);
   }

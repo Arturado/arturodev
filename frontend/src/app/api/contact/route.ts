@@ -11,6 +11,18 @@ export async function POST(req: Request) {
   }
 
   try {
+// Guardar en la DB via backend
+const dbRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ name, email, message }),
+});
+
+console.log("DB response status:", dbRes.status);
+const dbData = await dbRes.json();
+console.log("DB response data:", dbData);
+
+    // Enviar email
     await resend.emails.send({
       from: "Arturo <hola@arturodev.info>",
       to: process.env.CONTACT_EMAIL!,
@@ -39,7 +51,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error("Error enviando email:", error);
-    return NextResponse.json({ error: "Error enviando email" }, { status: 500 });
+    console.error("Error:", error);
+    return NextResponse.json({ error: "Error enviando mensaje" }, { status: 500 });
   }
 }
