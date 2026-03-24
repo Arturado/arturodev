@@ -24,11 +24,10 @@ export async function getPosts(): Promise<Post[]> {
 
 export async function getPost(slug: string): Promise<Post | null> {
   try {
-    console.log('Fetching post from:', `${API}/posts/${slug}`);
     const res = await fetch(`${API}/posts/${slug}`, { cache: 'no-store' });
-    console.log('Response status:', res.status);
+    if (!res.ok) return null;
     const text = await res.text();
-    console.log('Response text:', text.slice(0, 100));
+    if (!text || text.trim() === '') return null;
     return JSON.parse(text);
   } catch (err) {
     console.error('Error fetching post:', err);

@@ -26,10 +26,13 @@ export async function getProjects(): Promise<Project[]> {
 
 export async function getProject(slug: string): Promise<Project | null> {
   try {
-    const res = await fetch(`${API}/projects/${slug}`, { next: { revalidate: 60 } });
+    const res = await fetch(`${API}/projects/${slug}`, { cache: 'no-store' });
     if (!res.ok) return null;
-    return res.json();
-  } catch {
+    const text = await res.text();
+    if (!text || text.trim() === '') return null;
+    return JSON.parse(text);
+  } catch (err) {
+    console.error('Error fetching project:', err);
     return null;
   }
 }
