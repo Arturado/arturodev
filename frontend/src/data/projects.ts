@@ -12,7 +12,7 @@ export type Project = {
   published: boolean;
 };
 
-const API = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+const API = 'http://localhost:4000/api';
 
 export async function getProjects(): Promise<Project[]> {
   try {
