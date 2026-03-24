@@ -1,13 +1,15 @@
-import { posts } from "@/data/posts";
+import { getPosts, getPost } from "@/data/posts";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
 export async function generateStaticParams() {
+  const posts = await getPosts();
   return posts.map((p) => ({ slug: p.slug }));
 }
 
-export default function PostPage({ params }: { params: { slug: string } }) {
-  const post = posts.find((p) => p.slug === params.slug);
+export default async function PostPage({ params }: { params: { slug: string } }) {
+  const post = await getPost(params.slug);
   if (!post) notFound();
 
   return (
@@ -19,26 +21,18 @@ export default function PostPage({ params }: { params: { slug: string } }) {
           </svg>
           Volver al blog
         </Link>
-
         <div className="flex flex-wrap gap-2 mb-6">
           {post.tags.map((tag) => (
-            <span key={tag} className="px-2 py-1 bg-violet-600/10 border border-violet-500/20 text-violet-400 text-xs rounded-full">
-              {tag}
-            </span>
+            <span key={tag} className="px-2 py-1 bg-violet-600/10 border border-violet-500/20 text-violet-400 text-xs rounded-full">{tag}</span>
           ))}
         </div>
-
         <h1 className="text-4xl font-bold text-white mb-4 leading-tight">{post.title}</h1>
-
         <div className="flex items-center gap-3 text-xs text-gray-600 font-mono mb-10">
-          <span>{new Date(post.date).toLocaleDateString("es-CL", { year: "numeric", month: "long", day: "numeric" })}</span>
+          <span>{new Date(post.createdAt).toLocaleDateString("es-CL", { year: "numeric", month: "long", day: "numeric" })}</span>
           <span>·</span>
           <span>{post.readTime} de lectura</span>
         </div>
-
-        <div className="prose prose-invert prose-violet max-w-none text-gray-400 leading-relaxed">
-          {post.content}
-        </div>
+        <div className="text-gray-400 leading-relaxed whitespace-pre-wrap">{post.content}</div>
       </div>
     </main>
   );

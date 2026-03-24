@@ -1,4 +1,5 @@
 export type Project = {
+  id: string;
   slug: string;
   name: string;
   description: string;
@@ -8,29 +9,29 @@ export type Project = {
   liveUrl?: string;
   repoUrl?: string;
   year: string;
+  published: boolean;
 };
 
-export const projects: Project[] = [
-  {
-    slug: "ninchcompany",
-    name: "Ninch Company",
-    description: "Plataforma web corporativa con WordPress y gestión de contenido avanzada.",
-    longDescription: "Proyecto completo de desarrollo web corporativo. Incluye diseño personalizado, integración con APIs externas, panel de administración y optimización SEO.",
-    techs: ["WordPress", "PHP", "MySQL", "Elementor"],
-    image: "/images/projects/ninchcompany.jpg",
-    liveUrl: "https://ninchcompany.com",
-    repoUrl: "",
-    year: "2024",
-  },
-  {
-    slug: "proyecto-2",
-    name: "Proyecto 2",
-    description: "Descripción corta del proyecto.",
-    longDescription: "Descripción larga del proyecto con todos los detalles.",
-    techs: ["Next.js", "Nest.js", "PostgreSQL"],
-    image: "/images/projects/placeholder.jpg",
-    liveUrl: "",
-    repoUrl: "https://github.com/Arturados",
-    year: "2024",
-  },
-];
+export async function getProjects(): Promise<Project[]> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
+  }
+}
+
+export async function getProject(slug: string): Promise<Project | null> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${slug}`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}

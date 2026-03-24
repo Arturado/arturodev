@@ -1,8 +1,11 @@
-import { posts } from "@/data/posts";
+import { getPosts } from "@/data/posts";
 import BlogCard from "@/components/ui/BlogCard";
 import Link from "next/link";
 
-export default function BlogPage() {
+export const dynamic = 'force-dynamic';
+export default async function BlogPage() {
+  const posts = await getPosts();
+
   return (
     <main className="min-h-screen bg-[#0a0a0a] px-6 py-20">
       <div className="max-w-6xl mx-auto">

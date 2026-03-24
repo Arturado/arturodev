@@ -1,14 +1,16 @@
-import { projects } from "@/data/projects";
+import { getProjects, getProject } from "@/data/projects";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
 export async function generateStaticParams() {
+  const projects = await getProjects();
   return projects.map((p) => ({ slug: p.slug }));
 }
 
-export default function ProjectPage({ params }: { params: { slug: string } }) {
-  const project = projects.find((p) => p.slug === params.slug);
+export default async function ProjectPage({ params }: { params: { slug: string } }) {
+  const project = await getProject(params.slug);
   if (!project) notFound();
 
   return (
@@ -20,11 +22,9 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
           </svg>
           Volver al portfolio
         </Link>
-
         <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-10 border border-gray-800">
-          <Image src={project.image} alt={project.name} fill className="object-cover" />
+          {project.image && <Image src={project.image} alt={project.name} fill className="object-cover" />}
         </div>
-
         <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
           <div>
             <h1 className="text-4xl font-bold text-white mb-1">{project.name}</h1>
@@ -32,25 +32,17 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
           </div>
           <div className="flex gap-3">
             {project.liveUrl && (
-              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-violet-600 hover:bg-violet-500 text-white text-sm rounded-full transition-colors">
-                Ver sitio
-              </a>
+              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-violet-600 hover:bg-violet-500 text-white text-sm rounded-full transition-colors">Ver sitio</a>
             )}
             {project.repoUrl && (
-              <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 border border-gray-700 hover:border-violet-400 text-gray-400 hover:text-violet-400 text-sm rounded-full transition-colors">
-                GitHub
-              </a>
+              <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 border border-gray-700 hover:border-violet-400 text-gray-400 hover:text-violet-400 text-sm rounded-full transition-colors">GitHub</a>
             )}
           </div>
         </div>
-
         <p className="text-gray-400 leading-relaxed text-lg mb-8">{project.longDescription}</p>
-
         <div className="flex flex-wrap gap-2">
           {project.techs.map((tech) => (
-            <span key={tech} className="px-3 py-1 bg-violet-600/10 border border-violet-500/20 text-violet-400 text-sm rounded-full">
-              {tech}
-            </span>
+            <span key={tech} className="px-3 py-1 bg-violet-600/10 border border-violet-500/20 text-violet-400 text-sm rounded-full">{tech}</span>
           ))}
         </div>
       </div>

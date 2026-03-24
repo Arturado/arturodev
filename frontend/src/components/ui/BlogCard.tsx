@@ -33,7 +33,7 @@ export default function BlogCard({ post, index }: { post: Post; index: number })
       {/* Footer */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 text-xs text-gray-600 font-mono">
-          <span>{new Date(post.date).toLocaleDateString("es-CL", { year: "numeric", month: "short", day: "numeric" })}</span>
+          <span>{new Date(post.createdAt).toLocaleDateString("es-CL", { year: "numeric", month: "short", day: "numeric" })}</span>
           <span>·</span>
           <span>{post.readTime} lectura</span>
         </div>
