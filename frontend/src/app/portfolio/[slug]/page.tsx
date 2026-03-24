@@ -3,6 +3,10 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
+export async function generateStaticParams() {
+  return projects.map((p) => ({ slug: p.slug }));
+}
+
 export default function ProjectPage({ params }: { params: { slug: string } }) {
   const project = projects.find((p) => p.slug === params.slug);
   if (!project) notFound();
