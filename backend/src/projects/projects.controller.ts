@@ -28,6 +28,12 @@ export class ProjectsController {
     return this.projectsService.update(id, body);
   }
 
+  @Put('reorder')
+  @UseGuards(JwtAuthGuard)
+  reorder(@Body() body: { ids: string[] }) {
+    return this.projectsService.reorder(body.ids);
+  }
+
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {

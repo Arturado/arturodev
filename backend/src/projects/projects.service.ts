@@ -34,4 +34,14 @@ export class ProjectsService {
       where: { id },
     });
   }
+
+  async reorder(ids: string[]) {
+  const updates = ids.map((id, index) =>
+    this.prisma.project.update({
+      where: { id },
+      data: { order: index },
+    })
+  );
+  return Promise.all(updates);
+}
 }
