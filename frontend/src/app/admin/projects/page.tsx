@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import ProtectedRoute from "@/components/admin/ProtectedRoute";
 import api from "@/lib/api";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 type Project = {
   id: string;
@@ -86,7 +87,6 @@ export default function AdminProjects() {
               { key: "name", label: "Nombre", placeholder: "Mi proyecto" },
               { key: "slug", label: "Slug", placeholder: "mi-proyecto" },
               { key: "year", label: "Año", placeholder: "2024" },
-              { key: "image", label: "Imagen (URL)", placeholder: "/images/projects/foto.jpg" },
               { key: "liveUrl", label: "URL en vivo", placeholder: "https://..." },
               { key: "repoUrl", label: "Repositorio", placeholder: "https://github.com/..." },
             ].map(({ key, label, placeholder }) => (
@@ -95,6 +95,10 @@ export default function AdminProjects() {
                 <input value={(form as any)[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })} placeholder={placeholder} className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors" />
               </div>
             ))}
+            <div className="md:col-span-2">
+              <label className="text-gray-600 text-xs font-mono mb-1 block">Imagen</label>
+              <ImageUpload value={form.image} onChange={(url) => setForm({ ...form, image: url })} />
+            </div>
             <div className="md:col-span-2">
               <label className="text-gray-600 text-xs font-mono mb-1 block">Tecnologías (separadas por coma)</label>
               <input value={Array.isArray(form.techs) ? form.techs.join(", ") : form.techs} onChange={(e) => setForm({ ...form, techs: e.target.value as any })} placeholder="React, Next.js, PostgreSQL" className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors" />
