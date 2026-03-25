@@ -57,7 +57,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           <span>·</span>
           <span>{post.readTime} de lectura</span>
         </div>
-        <div className="text-gray-400 leading-relaxed whitespace-pre-wrap">{post.content}</div>
+        <div className="prose prose-invert prose-violet max-w-none text-gray-400" dangerouslySetInnerHTML={{ __html: post.content }} />
       </div>
     </main>
   );

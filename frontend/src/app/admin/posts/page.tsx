@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import ProtectedRoute from "@/components/admin/ProtectedRoute";
 import api from "@/lib/api";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 
 type Post = {
   id: string;
@@ -99,7 +100,7 @@ export default function AdminPosts() {
             </div>
             <div className="md:col-span-2">
               <label className="text-gray-600 text-xs font-mono mb-1 block">Contenido</label>
-              <textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} rows={8} placeholder="Escribí tu post acá..." className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors resize-none font-mono" />
+              <RichTextEditor value={form.content} onChange={(v) => setForm({ ...form, content: v })} />
             </div>
             <div className="md:col-span-2 flex items-center gap-3">
               <input type="checkbox" id="published" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} className="w-4 h-4 accent-violet-500" />

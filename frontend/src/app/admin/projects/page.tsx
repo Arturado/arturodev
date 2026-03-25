@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ProtectedRoute from "@/components/admin/ProtectedRoute";
 import api from "@/lib/api";
 import ImageUpload from "@/components/admin/ImageUpload";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 
 type Project = {
   id: string;
@@ -109,7 +110,7 @@ export default function AdminProjects() {
             </div>
             <div className="md:col-span-2">
               <label className="text-gray-600 text-xs font-mono mb-1 block">Descripción larga</label>
-              <textarea value={form.longDescription} onChange={(e) => setForm({ ...form, longDescription: e.target.value })} rows={4} placeholder="Descripción detallada del proyecto..." className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors resize-none" />
+              <RichTextEditor value={form.longDescription} onChange={(v) => setForm({ ...form, longDescription: v })} />
             </div>
             <div className="md:col-span-2 flex items-center gap-3">
               <input type="checkbox" id="published" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} className="w-4 h-4 accent-violet-500" />
