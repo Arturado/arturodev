@@ -65,7 +65,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             )}
           </div>
         </div>
-        <div className="prose prose-invert prose-violet max-w-none text-gray-400 mb-8" dangerouslySetInnerHTML={{ __html: project.longDescription }} /> 
+        <div
+          className="prose prose-invert prose-violet max-w-none text-gray-400 mb-8"
+          dangerouslySetInnerHTML={{ __html: project.longDescription }}
+        />
+        <div className="flex flex-wrap gap-2">
           {project.techs.map((tech) => (
             <span key={tech} className="px-3 py-1 bg-violet-600/10 border border-violet-500/20 text-violet-400 text-sm rounded-full">{tech}</span>
           ))}
