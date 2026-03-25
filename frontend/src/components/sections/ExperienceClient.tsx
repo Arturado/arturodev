@@ -24,8 +24,8 @@ export default function ExperienceClient({ work, education, certifications }: Pr
   const dataMap: Record<Tab, Experience[]> = {
     work,
     education,
-    certifications,
-  };
+    certification: certifications,
+};
 
   const items = dataMap[activeTab];
 
