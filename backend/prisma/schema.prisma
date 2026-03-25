@@ -53,3 +53,19 @@ model User {
   password  String
   createdAt DateTime @default(now())
 }
+
+model Experience {
+  id          String   @id @default(cuid())
+  type        String   // "work" | "education" | "certification"
+  role        String
+  company     String
+  location    String
+  period      String
+  description String
+  highlights  String[]
+  techs       String[]
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
