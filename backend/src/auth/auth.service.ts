@@ -11,13 +11,21 @@ export class AuthService {
   ) {}
 
   async login(email: string, password: string) {
-    const user = await this.prisma.user.findUnique({ where: { email } });
-    if (!user) throw new UnauthorizedException('Credenciales inválidas');
+  const user = await this.prisma.user.findUnique({ where: { email } });
 
-    const valid = await bcrypt.compare(password, user.password);
-    if (!valid) throw new UnauthorizedException('Credenciales inválidas');
-
-    const token = this.jwt.sign({ sub: user.id, email: user.email });
-    return { access_token: token };
+  if (!user) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    throw new UnauthorizedException('Credenciales inválidas');
   }
+
+  const valid = await bcrypt.compare(password, user.password);
+
+  if (!valid) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    throw new UnauthorizedException('Credenciales inválidas');
+  }
+
+  const token = this.jwt.sign({ sub: user.id, email: user.email });
+  return { access_token: token };
+}
 }
