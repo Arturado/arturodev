@@ -1,5 +1,5 @@
 import ExperienceClient from "@/components/sections/ExperienceClient";
-import { Experience } from "@/data/experience";
+import type { Experience } from "@/data/experience";
 
 const API = 'http://127.0.0.1:4000/api';
 
