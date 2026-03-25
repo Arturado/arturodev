@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import PageTransition from "@/components/layout/PageTransition";
+import { getConfig } from "@/data/config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,14 +32,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const config = await getConfig();
+  const primaryColor = config.primary_color || "#7c3aed";
+
   return (
     <html lang="es">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{ "--primary-color": primaryColor } as React.CSSProperties}
+      >
         <Navbar />
         <PageTransition>
           {children}
