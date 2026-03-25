@@ -2,19 +2,17 @@
 
 import { useEffect, useState } from "react";
 
-const roles = [
-  "Full Stack Developer",
-  "Software Engineer",
-  "WordPress & PHP Expert",
-  "Builder of digital products",
-];
+type Props = {
+  roles: string[];
+};
 
-export default function TypewriterText() {
+export default function TypewriterText({ roles }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [displayed, setDisplayed] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
+    if (!roles.length) return;
     const current = roles[currentIndex];
     const speed = isDeleting ? 40 : 80;
     const timeout = setTimeout(() => {
@@ -32,7 +30,7 @@ export default function TypewriterText() {
       }
     }, speed);
     return () => clearTimeout(timeout);
-  }, [displayed, isDeleting, currentIndex]);
+  }, [displayed, isDeleting, currentIndex, roles]);
 
   return (
     <span className="text-violet-400">

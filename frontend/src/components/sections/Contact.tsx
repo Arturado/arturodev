@@ -2,8 +2,17 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import type { SiteConfig } from "@/data/config";
 
-export default function Contact() {
+type Props = {
+  config: SiteConfig;
+};
+
+export default function Contact({ config }: Props) {
+  // Reemplazá el email hardcodeado por:
+  const email = config.site_email || "hola@arturodev.info";
+  const github = config.social_github || "https://github.com/Arturados";
+  const linkedin = config.social_linkedin || "https://linkedin.com/in/tu-perfil";
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -72,7 +81,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-gray-600 text-xs font-mono mb-1">Email</p>
-                  <a href="mailto:arturados@gmail.com" className="text-gray-400 hover:text-violet-400 transition-colors">hola@arturodev.info</a>
+                  <a href={`mailto:${email}`} className="text-gray-400 hover:text-violet-400 transition-colors">{email}</a>
                 </div>
               </div>
 
@@ -84,7 +93,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-gray-600 text-xs font-mono mb-1">LinkedIn</p>
-                  <a href="https://www.linkedin.com/in/arturo-vasquez/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-violet-400 transition-colors">https://www.linkedin.com/in/arturo-vasquez/</a>
+                  <a href={linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-violet-400 transition-colors">{linkedin}</a>
                 </div>
               </div>
 
@@ -96,7 +105,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-gray-600 text-xs font-mono mb-1">GitHub</p>
-                  <a href="https://github.com/Arturado" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-violet-400 transition-colors">https://github.com/Arturado</a>
+                  <a href={github} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-violet-400 transition-colors">{github}</a>
                 </div>
               </div>
             </div>
