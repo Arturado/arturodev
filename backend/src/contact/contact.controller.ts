@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Req } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -12,9 +12,10 @@ export class ContactController {
   }
 
   @Post()
-  create(@Body() body: any) {
+  create(@Body() body: any, @Req() req: any) {
+    console.log(`[Contact] Nueva solicitud desde IP: ${req.ip} - Email: ${body.email}`);
     return this.contactService.create(body);
-  }
+}
 
   @Put(':id/read')
   @UseGuards(JwtAuthGuard)
