@@ -11,7 +11,7 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
       body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
     });
     const data = await res.json();
-    return data.success && data.score >= 0.5;
+    return data.success && data.score >= 0.7;
   } catch {
     return false;
   }
