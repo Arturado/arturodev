@@ -22,16 +22,16 @@ export class ProjectsController {
     return this.projectsService.create(body);
   }
 
-  @Put(':id')
-  @UseGuards(JwtAuthGuard)
-  update(@Param('id') id: string, @Body() body: any) {
-    return this.projectsService.update(id, body);
-  }
-
   @Put('reorder')
   @UseGuards(JwtAuthGuard)
   reorder(@Body() body: { ids: string[] }) {
     return this.projectsService.reorder(body.ids);
+  }
+
+  @Put(':id')
+  @UseGuards(JwtAuthGuard)
+  update(@Param('id') id: string, @Body() body: any) {
+    return this.projectsService.update(id, body);
   }
 
   @Delete(':id')
