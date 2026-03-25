@@ -16,6 +16,18 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Arturo — Full Stack Developer",
   description: "+7 años construyendo productos digitales. Next.js, Nest.js, WordPress, Python.",
+  openGraph: {
+    title: "Arturo — Full Stack Developer",
+    description: "+7 años construyendo productos digitales.",
+    url: "https://arturodev.info",
+    siteName: "arturodev.info",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Arturo — Full Stack Developer",
+    description: "+7 años construyendo productos digitales.",
+  },
 };
 
 export default function RootLayout({

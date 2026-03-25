@@ -2,11 +2,36 @@ import { getProjects, getProject } from "@/data/projects";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 
 export const dynamic = 'force-dynamic';
 export async function generateStaticParams() {
   const projects = await getProjects();
   return projects.map((p) => ({ slug: p.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const project = await getProject(slug);
+
+  if (!project) return { title: "Proyecto no encontrado" };
+
+  return {
+    title: `${project.name} — Arturo`,
+    description: project.description,
+    openGraph: {
+      title: project.name,
+      description: project.description,
+      images: project.image ? [{ url: project.image, width: 1200, height: 630 }] : [],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.name,
+      description: project.description,
+      images: project.image ? [project.image] : [],
+    },
+  };
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
