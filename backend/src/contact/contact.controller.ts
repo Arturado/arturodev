@@ -7,6 +7,7 @@ export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll() {
     return this.contactService.findAll();
   }
