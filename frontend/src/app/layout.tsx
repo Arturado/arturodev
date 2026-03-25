@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import PageTransition from "@/components/layout/PageTransition";
+import RecaptchaProvider from "@/components/layout/RecaptchaProvider";
 import { getConfig } from "@/data/config";
 
 const geistSans = Geist({
@@ -46,10 +47,12 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         style={{ "--primary-color": primaryColor } as React.CSSProperties}
       >
-        <Navbar />
-        <PageTransition>
-          {children}
-        </PageTransition>
+        <RecaptchaProvider>
+          <Navbar />
+          <PageTransition>
+            {children}
+          </PageTransition>
+        </RecaptchaProvider>
       </body>
     </html>
   );

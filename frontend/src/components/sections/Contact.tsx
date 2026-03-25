@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import type { SiteConfig } from "@/data/config";
 
 type Props = {
@@ -9,12 +10,12 @@ type Props = {
 };
 
 export default function Contact({ config }: Props) {
-  // Reemplazá el email hardcodeado por:
   const email = config.site_email || "hola@arturodev.info";
   const github = config.social_github || "https://github.com/Arturados";
   const linkedin = config.social_linkedin || "https://linkedin.com/in/tu-perfil";
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -23,12 +24,20 @@ export default function Contact({ config }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
+
     try {
+      if (!executeRecaptcha) {
+        setStatus("error");
+        return;
+      }
+      const recaptchaToken = await executeRecaptcha("contact_form");
+
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, recaptchaToken }),
       });
+
       if (res.ok) {
         setStatus("success");
         setForm({ name: "", email: "", message: "" });
@@ -59,8 +68,6 @@ export default function Contact({ config }: Props) {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-
-          {/* Info izquierda */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -111,7 +118,6 @@ export default function Contact({ config }: Props) {
             </div>
           </motion.div>
 
-          {/* Formulario derecha */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -121,61 +127,26 @@ export default function Contact({ config }: Props) {
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="text-gray-600 text-xs font-mono mb-2 block">Nombre</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  required
-                  placeholder="Tu nombre"
-                  className="w-full bg-gray-900/50 border border-gray-800 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-3 text-sm outline-none transition-colors"
-                />
+                <input type="text" name="name" value={form.name} onChange={handleChange} required placeholder="Tu nombre" className="w-full bg-gray-900/50 border border-gray-800 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-3 text-sm outline-none transition-colors" />
               </div>
               <div>
                 <label className="text-gray-600 text-xs font-mono mb-2 block">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="tu@email.com"
-                  className="w-full bg-gray-900/50 border border-gray-800 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-3 text-sm outline-none transition-colors"
-                />
+                <input type="email" name="email" value={form.email} onChange={handleChange} required placeholder="tu@email.com" className="w-full bg-gray-900/50 border border-gray-800 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-3 text-sm outline-none transition-colors" />
               </div>
               <div>
                 <label className="text-gray-600 text-xs font-mono mb-2 block">Mensaje</label>
-                <textarea
-                  name="message"
-                  value={form.message}
-                  onChange={handleChange}
-                  required
-                  rows={5}
-                  placeholder="Contame sobre tu proyecto..."
-                  className="w-full bg-gray-900/50 border border-gray-800 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-3 text-sm outline-none transition-colors resize-none"
-                />
+                <textarea name="message" value={form.message} onChange={handleChange} required rows={5} placeholder="Contame sobre tu proyecto..." className="w-full bg-gray-900/50 border border-gray-800 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-3 text-sm outline-none transition-colors resize-none" />
               </div>
-
-              <button
-                type="submit"
-                disabled={status === "loading"}
-                className="w-full py-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-50 text-white font-medium rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/25"
-              >
+              <button type="submit" disabled={status === "loading"} className="w-full py-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-50 text-white font-medium rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/25">
                 {status === "loading" ? "Enviando..." : "Enviar mensaje"}
               </button>
-
-              {status === "success" && (
-                <p className="text-center text-sm text-green-400">Mensaje enviado correctamente!</p>
-              )}
-              {status === "error" && (
-                <p className="text-center text-sm text-red-400">Hubo un error, intentá de nuevo.</p>
-              )}
+              {status === "success" && <p className="text-center text-sm text-green-400">Mensaje enviado correctamente!</p>}
+              {status === "error" && <p className="text-center text-sm text-red-400">Hubo un error, intentá de nuevo.</p>}
             </form>
           </motion.div>
         </div>
       </div>
 
-      {/* Footer */}
       <div className="max-w-6xl mx-auto mt-20 pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
         <p className="text-gray-700 text-sm font-mono">© 2026 Arturo — arturodev.info</p>
         <p className="text-gray-700 text-sm font-mono">Hecho con Next.js + Nest.js :)</p>

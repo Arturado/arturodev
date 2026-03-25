@@ -3,26 +3,44 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+async function verifyRecaptcha(token: string): Promise<boolean> {
+  try {
+    const res = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
+    });
+    const data = await res.json();
+    return data.success && data.score >= 0.5;
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(req: Request) {
-  const { name, email, message } = await req.json();
+  const { name, email, message, recaptchaToken } = await req.json();
 
   if (!name || !email || !message) {
     return NextResponse.json({ error: "Faltan campos" }, { status: 400 });
   }
 
+  if (!recaptchaToken) {
+    return NextResponse.json({ error: "reCAPTCHA requerido" }, { status: 400 });
+  }
+
+  const isHuman = await verifyRecaptcha(recaptchaToken);
+  if (!isHuman) {
+    return NextResponse.json({ error: "reCAPTCHA inválido" }, { status: 400 });
+  }
+
   try {
-// Guardar en la DB via backend
-const dbRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ name, email, message }),
-});
+    const dbRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, message }),
+    });
+    console.log("DB response status:", dbRes.status);
 
-console.log("DB response status:", dbRes.status);
-const dbData = await dbRes.json();
-console.log("DB response data:", dbData);
-
-    // Enviar email
     await resend.emails.send({
       from: "Arturo <hola@arturodev.info>",
       to: process.env.CONTACT_EMAIL!,
