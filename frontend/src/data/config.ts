@@ -1,4 +1,4 @@
-const API = 'http://127.0.0.1:4000/api';
+const API = process.env.API_URL || 'http://127.0.0.1:4000/api';
 
 export type SiteConfig = {
   site_name: string;
