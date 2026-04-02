@@ -16,7 +16,7 @@ const API = process.env.API_URL || 'http://127.0.0.1:4000/api';
 
 export async function getProjects(): Promise<Project[]> {
   try {
-    const res = await fetch(`${API}/projects`, { next: { revalidate: 60 } });
+    const res = await fetch(`${API}/projects`, { cache: 'no-store' });
     if (!res.ok) return [];
     return res.json();
   } catch {
