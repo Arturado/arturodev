@@ -15,7 +15,7 @@ import { ConfigModule } from './config/config.module';
     NestConfigModule.forRoot({ isGlobal: true }),
     ThrottlerModule.forRoot([{
       ttl: 60000,
-      limit: 3,
+      limit: 100,
     }]),
     PrismaModule,
     AuthModule,
