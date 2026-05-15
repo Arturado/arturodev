@@ -1,28 +1,60 @@
-import ProjectCard from "@/components/ui/ProjectCard";
-import { getProjects } from "@/data/projects";
+"use client";
 
-export default async function Portfolio() {
-  const projects = await getProjects();
+import { useEffect, useRef } from "react";
+import { animate, stagger, onScroll } from "animejs";
+import Image from "next/image";
+import type { Project } from "@/data/projects";
+
+export default function Portfolio({ projects }: { projects: Project[] }) {
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!gridRef.current) return;
+    const ctrl = animate(gridRef.current.querySelectorAll(".project"), {
+      opacity: [0, 1], scale: [0.92, 1], translateY: [30, 0],
+      delay: stagger(80), duration: 800, ease: "outBack",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      autoplay: onScroll({ target: gridRef.current, enter: "bottom-=10% top", once: true } as any),
+    });
+    return () => { ctrl.pause(); };
+  }, []);
 
   return (
-    <section id="portfolio" className="relative bg-[#0d0d0d] py-28 px-6 overflow-hidden">
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 text-[120px] font-black text-white/[0.03] select-none whitespace-nowrap pointer-events-none">
-        PORTFOLIO
-      </div>
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-violet-400 font-mono text-sm mb-2">— mis proyectos</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-white">Portfolio</h2>
-        </div>
-        {projects.length === 0 ? (
-          <p className="text-center text-gray-600">No hay proyectos todavía.</p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project, i) => (
-              <ProjectCard key={project.slug} project={project} index={i} />
-            ))}
+    <section id="projects">
+      <div className="container">
+        <div className="section-head">
+          <div>
+            <div className="section-num">03 / SELECTED WORK</div>
+            <h2 className="section-title">Selected <em>projects</em></h2>
           </div>
-        )}
+          <p className="section-lede">Una selección de lo que he publicado. Catálogo completo disponible a pedido.</p>
+        </div>
+
+        <div className="projects-grid" ref={gridRef}>
+          {projects.map((p) => (
+            <article key={p.id} className="project">
+              <div className="project-cover" data-mock={p.name}>
+                {p.image ? (
+                  <Image src={p.image} alt={p.name} fill style={{ objectFit: "cover" }} loading="lazy" />
+                ) : null}
+                <div className="project-overlay">
+                  {p.liveUrl && <a href={p.liveUrl} target="_blank" rel="noreferrer">Live demo ↗</a>}
+                  {p.repoUrl && <a href={p.repoUrl} target="_blank" rel="noreferrer">GitHub ↗</a>}
+                </div>
+              </div>
+              <div className="project-body">
+                <div className="project-meta">
+                  <span>{p.year}</span>
+                  <span>Full-Stack</span>
+                </div>
+                <h3 className="project-title">{p.name}</h3>
+                <div className="project-tags">
+                  {p.techs.map((t) => <span key={t}>{t}</span>)}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

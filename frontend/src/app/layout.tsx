@@ -1,26 +1,30 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Sora, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
-import PageTransition from "@/components/layout/PageTransition";
 import RecaptchaProvider from "@/components/layout/RecaptchaProvider";
-import { getConfig } from "@/data/config";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sora = Sora({
   subsets: ["latin"],
+  weight: ["400", "700", "800"],
+  variable: "--font-display",
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-body",
+});
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
-  title: "Arturo — Full Stack Developer",
+  title: "Arturo Vasquez — Full-Stack Developer",
   description: "+7 años construyendo productos digitales. Next.js, Nest.js, WordPress, Python.",
   openGraph: {
-    title: "Arturo — Full Stack Developer",
+    title: "Arturo Vasquez — Full-Stack Developer",
     description: "+7 años construyendo productos digitales.",
     url: "https://arturodev.info",
     siteName: "arturodev.info",
@@ -28,30 +32,23 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Arturo — Full Stack Developer",
+    title: "Arturo Vasquez — Full-Stack Developer",
     description: "+7 años construyendo productos digitales.",
   },
 };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const config = await getConfig();
-  const primaryColor = config.primary_color || "#7c3aed";
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ "--primary-color": primaryColor } as React.CSSProperties}
-      >
+    <html
+      lang="es"
+      data-theme="dark"
+      className={`${sora.variable} ${inter.variable} ${mono.variable}`}
+    >
+      <body>
         <RecaptchaProvider>
+          <div className="grain" />
           <Navbar />
-          <PageTransition>
-            {children}
-          </PageTransition>
+          {children}
         </RecaptchaProvider>
       </body>
     </html>

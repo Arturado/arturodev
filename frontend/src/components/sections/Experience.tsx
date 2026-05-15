@@ -1,24 +1,58 @@
-import ExperienceClient from "@/components/sections/ExperienceClient";
+"use client";
+
+import { useEffect, useRef } from "react";
+import { animate, onScroll } from "animejs";
 import type { Experience } from "@/data/experience";
 
-const API = 'http://127.0.0.1:4000/api';
+export default function ExperienceTimeline({ items }: { items: Experience[] }) {
+  const ref = useRef<HTMLDivElement>(null);
 
-async function getExperience(type: string): Promise<Experience[]> {
-  try {
-    const res = await fetch(`${API}/experience?type=${type}`, { cache: 'no-store' });
-    if (!res.ok) return [];
-    return res.json();
-  } catch {
-    return [];
-  }
-}
+  useEffect(() => {
+    if (!ref.current) return;
+    const nodes = ref.current.querySelectorAll<HTMLElement>(".tl-node");
+    const ctrls = [...nodes].map((node) =>
+      animate(node, {
+        opacity: [0, 1], translateY: [60, 0],
+        duration: 1000, ease: "outExpo",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        autoplay: onScroll({ target: node, enter: "bottom-=10% top", once: true } as any),
+      })
+    );
+    return () => ctrls.forEach((c) => c.pause());
+  }, [items]);
 
-export default async function Experience() {
-  const [work, education, certifications] = await Promise.all([
-    getExperience('work'),
-    getExperience('education'),
-    getExperience('certification'),
-  ]);
+  return (
+    <section id="resume">
+      <div className="container">
+        <div className="section-head">
+          <div>
+            <div className="section-num">04 / RESUME</div>
+            <h2 className="section-title">A short <em>timeline</em></h2>
+          </div>
+          <p className="section-lede">Siete años en estudios, startups y freelance. Siempre publicando.</p>
+        </div>
 
-  return <ExperienceClient work={work} education={education} certifications={certifications} />;
+        <div className="timeline" ref={ref}>
+          {items.map((it, i) => {
+            const side = i % 2 === 0 ? "right" : "left";
+            return (
+              <div key={it.id} className={`tl-node ${side}`}>
+                <div className="tl-meta tl-side">
+                  <div className="tl-date">{it.period}</div>
+                  <div className="tl-place">{it.company}{it.location ? ` · ${it.location}` : ""}</div>
+                </div>
+                <div className="tl-card tl-side">
+                  <h4 className="tl-title">{it.role}</h4>
+                  <p className="tl-desc">{it.description}</p>
+                  <div className="tl-tags">
+                    {it.techs.map((t) => <span key={t}>{t}</span>)}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
 }

@@ -1,33 +1,53 @@
-import BlogCard from "@/components/ui/BlogCard";
-import { getPosts } from "@/data/posts";
-import Link from "next/link";
+"use client";
 
-export default async function Blog() {
-  const posts = await getPosts();
+import { useEffect, useRef } from "react";
+import { animate, stagger, onScroll } from "animejs";
+import Link from "next/link";
+import type { Post } from "@/data/posts";
+
+export default function Journal({ posts }: { posts: Post[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const ctrl = animate(ref.current.querySelectorAll(".post"), {
+      opacity: [0, 1], translateY: [40, 0],
+      delay: stagger(100), duration: 900, ease: "outExpo",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      autoplay: onScroll({ target: ref.current, enter: "bottom-=10% top", once: true } as any),
+    });
+    return () => { ctrl.pause(); };
+  }, [posts]);
 
   return (
-    <section id="blog" className="relative bg-[#0a0a0a] py-28 px-6 overflow-hidden">
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 text-[120px] font-black text-white/[0.03] select-none whitespace-nowrap pointer-events-none">
-        BLOG
-      </div>
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-violet-400 font-mono text-sm mb-2">— mis ideas</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-white">Blog</h2>
-        </div>
-        {posts.length === 0 ? (
-          <p className="text-center text-gray-600">No hay posts todavía.</p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {posts.map((post, i) => (
-              <BlogCard key={post.slug} post={post} index={i} />
-            ))}
+    <section id="journal">
+      <div className="container">
+        <div className="section-head">
+          <div>
+            <div className="section-num">05 / JOURNAL</div>
+            <h2 className="section-title">Recent <em>writing</em></h2>
           </div>
-        )}
-        <div className="text-center">
-          <Link href="/blog" className="inline-flex items-center gap-2 px-6 py-3 border border-gray-700 hover:border-violet-400 text-gray-400 hover:text-violet-400 font-medium rounded-full transition-all duration-300">
-            Ver todos los posts
-          </Link>
+          <p className="section-lede">Notas sobre publicar, el oficio y las herramientas a las que siempre vuelvo.</p>
+        </div>
+
+        <div className="blog-grid" ref={ref}>
+          {posts.map((p) => (
+            <Link key={p.id} className="post" href={`/blog/${p.slug}`}>
+              <div className="post-cover" data-mock={p.title} />
+              <div className="post-body">
+                <div className="post-meta">
+                  <span className="cat">{p.tags?.[0] ?? "Dev"}</span>
+                  <span>
+                    {new Date(p.createdAt).toLocaleDateString("es-MX", {
+                      month: "short", day: "2-digit", year: "numeric",
+                    })}
+                  </span>
+                </div>
+                <h3 className="post-title">{p.title}</h3>
+                <div className="post-readmore">Read note <span>→</span></div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
