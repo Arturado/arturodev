@@ -1,10 +1,8 @@
 name: Deploy to Donweb
-
 on:
   push:
     branches:
       - main
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,17 +17,15 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             cd /var/www/arturodev
-
             git fetch origin
             git reset --hard origin/main
-
+            git clean -fd
             cd frontend
             npm install
             npm run build
             cp -r .next/static .next/standalone/.next/static
             cp -r public .next/standalone/public
             pm2 restart arturodev-frontend
-
             cd ../backend
             npm install
             npx prisma generate
