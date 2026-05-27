@@ -38,36 +38,38 @@
   --primary-glow: rgba(13, 13, 13, 0.12);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-html, body { background: var(--bg); color: var(--fg); }
-body {
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  overflow-x: hidden;
-  transition: background 0.5s var(--ease-out), color 0.5s var(--ease-out);
-}
-body.cursor-active { cursor: none; }
-body.cursor-active a,
-body.cursor-active button,
-body.cursor-active input,
-body.cursor-active textarea,
-body.cursor-active select { cursor: none; }
-@media (pointer: coarse) {
-  body.cursor-active,
+@layer base {
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  html, body { background: var(--bg); color: var(--fg); }
+  body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    transition: background 0.5s var(--ease-out), color 0.5s var(--ease-out);
+  }
+  body.cursor-active { cursor: none; }
   body.cursor-active a,
   body.cursor-active button,
   body.cursor-active input,
   body.cursor-active textarea,
-  body.cursor-active select { cursor: auto; }
-}
+  body.cursor-active select { cursor: none; }
+  @media (pointer: coarse) {
+    body.cursor-active,
+    body.cursor-active a,
+    body.cursor-active button,
+    body.cursor-active input,
+    body.cursor-active textarea,
+    body.cursor-active select { cursor: auto; }
+  }
 
-a { color: inherit; text-decoration: none; }
-button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
-img, svg { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  img, svg { display: block; max-width: 100%; }
+}
 
 /* Cursor ----------------------------------------------------------------- */
 .cursor-dot,
