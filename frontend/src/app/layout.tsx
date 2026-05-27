@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Sora, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import RecaptchaProvider from "@/components/layout/RecaptchaProvider";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -44,13 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       data-theme="dark"
       className={`${sora.variable} ${inter.variable} ${mono.variable}`}
     >
-      <body>
-        <RecaptchaProvider>
-          <div className="grain" />
-          <Navbar />
-          {children}
-        </RecaptchaProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
