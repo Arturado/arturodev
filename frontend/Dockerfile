@@ -1,23 +1,29 @@
 FROM node:20-alpine AS builder
-
 WORKDIR /app
-
 COPY package*.json ./
 RUN npm ci
-
 COPY . .
+
+# Variables necesarias en tiempo de build
+ARG RESEND_API_KEY
+ARG CONTACT_EMAIL
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+ARG NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+
+ENV RESEND_API_KEY=$RESEND_API_KEY
+ENV CONTACT_EMAIL=$CONTACT_EMAIL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=$NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+ENV NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+
 RUN npm run build
 
 FROM node:20-alpine AS runner
-
 WORKDIR /app
-
 ENV NODE_ENV=production
-
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-
 EXPOSE 3000
-
 CMD ["node", "server.js"]
