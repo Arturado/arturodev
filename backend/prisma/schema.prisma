@@ -9,20 +9,23 @@ datasource db {
 }
 
 model Project {
-  id              String   @id @default(cuid())
-  slug            String   @unique
-  name            String
-  description     String
-  longDescription String
-  techs           String[]
-  image           String?
-  liveUrl         String?
-  repoUrl         String?
-  year            String
-  order           Int      @default(0)
-  published       Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  name              String
+  nameEn            String?
+  description       String
+  descriptionEn     String?
+  longDescription   String
+  longDescriptionEn String?
+  techs             String[]
+  image             String?
+  liveUrl           String?
+  repoUrl           String?
+  year              String
+  order             Int      @default(0)
+  published         Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model Post {
@@ -75,4 +78,22 @@ model Config {
   key       String   @unique
   value     String
   updatedAt DateTime @updatedAt
+}
+
+model HeroSlide {
+  id            String   @id @default(cuid())
+  title         String
+  titleEn       String?
+  subtitle      String
+  subtitleEn    String?
+  description   String
+  descriptionEn String?
+  ctaText       String
+  ctaTextEn     String?
+  ctaUrl        String
+  imageUrl      String?
+  order         Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

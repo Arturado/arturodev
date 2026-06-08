@@ -1,13 +1,14 @@
 import dynamic from "next/dynamic";
-import { getConfig }   from "@/data/config";
-import { getProjects } from "@/data/projects";
-import { getPosts }    from "@/data/posts";
+import { getConfig }      from "@/data/config";
+import { getProjects }    from "@/data/projects";
+import { getPosts }       from "@/data/posts";
+import { getHeroSlides }  from "@/data/heroSlides";
 import type { Experience } from "@/data/experience";
-import { Cursor }      from "@/components/primitives/Cursor";
-import Hero            from "@/components/sections/Hero";
-import { Transmission } from "@/components/sections/Transmission";
-import { Services }    from "@/components/sections/Services";
-import { Footer }      from "@/components/layout/Footer";
+import { Cursor }         from "@/components/primitives/Cursor";
+import HeroSlider         from "@/components/sections/HeroSlider";
+import { Transmission }   from "@/components/sections/Transmission";
+import { Services }       from "@/components/sections/Services";
+import { Footer }         from "@/components/layout/Footer";
 
 const About    = dynamic(() => import("@/components/sections/About"));
 const Portfolio = dynamic(() => import("@/components/sections/Portfolio"));
@@ -28,17 +29,18 @@ async function getExperience(): Promise<Experience[]> {
 }
 
 export default async function HomePage() {
-  const [config, projects, posts, experience] = await Promise.all([
+  const [config, projects, posts, experience, slides] = await Promise.all([
     getConfig(),
     getProjects(),
     getPosts(),
     getExperience(),
+    getHeroSlides(),
   ]);
 
   return (
     <main>
       <Cursor />
-      <Hero config={config} />
+      <HeroSlider slides={slides} config={config} />
       <Transmission />
       <About config={config} />
       <Services />

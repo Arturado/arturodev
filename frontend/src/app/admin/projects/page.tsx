@@ -26,8 +26,11 @@ type Project = {
   id: string;
   slug: string;
   name: string;
+  nameEn: string;
   description: string;
+  descriptionEn: string;
   longDescription: string;
+  longDescriptionEn: string;
   techs: string[];
   image: string;
   liveUrl: string;
@@ -37,7 +40,8 @@ type Project = {
 };
 
 const empty: Omit<Project, "id"> = {
-  slug: "", name: "", description: "", longDescription: "",
+  slug: "", name: "", nameEn: "", description: "", descriptionEn: "",
+  longDescription: "", longDescriptionEn: "",
   techs: [], image: "", liveUrl: "", repoUrl: "",
   year: new Date().getFullYear().toString(), published: true,
 };
@@ -61,6 +65,18 @@ export default function AdminProjects() {
   };
 
   useEffect(() => { fetchProjects(); }, []);
+
+  useEffect(() => {
+    if (editing || !form.name) return;
+    const auto = form.name
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+    setForm(prev => ({ ...prev, slug: auto }));
+  }, [form.name, editing]);
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
@@ -168,12 +184,30 @@ export default function AdminProjects() {
                 className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors"
               />
             </div>
+            <div>
+              <label className="text-gray-600 text-xs font-mono mb-1 block">Nombre EN</label>
+              <input
+                value={form.nameEn}
+                onChange={(e) => setForm({ ...form, nameEn: e.target.value })}
+                placeholder="My project (English)"
+                className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors"
+              />
+            </div>
             <div className="md:col-span-2">
-              <label className="text-gray-600 text-xs font-mono mb-1 block">Descripción corta</label>
+              <label className="text-gray-600 text-xs font-mono mb-1 block">Descripción corta ES</label>
               <input
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 placeholder="Descripción breve del proyecto"
+                className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="text-gray-600 text-xs font-mono mb-1 block">Descripción corta EN</label>
+              <input
+                value={form.descriptionEn}
+                onChange={(e) => setForm({ ...form, descriptionEn: e.target.value })}
+                placeholder="Short project description (English)"
                 className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors"
               />
             </div>

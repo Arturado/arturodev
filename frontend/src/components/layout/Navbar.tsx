@@ -2,19 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-
-const LINKS = [
-  { idx: "01", label: "About",    href: "#about" },
-  { idx: "02", label: "Services", href: "#services" },
-  { idx: "03", label: "Projects", href: "#projects" },
-  { idx: "04", label: "Resume",   href: "#resume" },
-  { idx: "05", label: "Journal",  href: "#journal" },
-  { idx: "06", label: "Contact",  href: "#contact" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Navbar() {
   const ref = useRef<HTMLElement>(null);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const { locale, setLocale, t } = useLanguage();
+
+  const LINKS = [
+    { idx: "01", label: t("nav.about"),    href: "#about" },
+    { idx: "02", label: t("nav.services"), href: "#services" },
+    { idx: "03", label: t("nav.projects"), href: "#projects" },
+    { idx: "04", label: t("nav.resume"),   href: "#resume" },
+    { idx: "05", label: t("nav.journal"),  href: "#journal" },
+    { idx: "06", label: t("nav.contact"),  href: "#contact" },
+  ];
 
   useEffect(() => {
     const onScroll = () => ref.current?.classList.toggle("scrolled", window.scrollY > 40);
@@ -61,9 +63,16 @@ export default function Navbar() {
       </div>
 
       <div className="nav-right">
+        <button
+          className="lang-toggle"
+          aria-label="Toggle language"
+          onClick={() => setLocale(locale === "es" ? "en" : "es")}
+        >
+          {locale === "es" ? "EN" : "ES"}
+        </button>
         <button className="theme-toggle" aria-label="Toggle theme" aria-pressed={theme === "light"} onClick={toggleTheme} />
         <Link href="#contact" className="nav-cta" onClick={(e) => onAnchor(e, "#contact")}>
-          Let&apos;s talk <span className="arrow">→</span>
+          {t("nav.cta")} <span className="arrow">→</span>
         </Link>
       </div>
     </nav>
