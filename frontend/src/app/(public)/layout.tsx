@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import RecaptchaProvider from "@/components/providers/RecaptchaProvider";
 import { getConfig } from "@/data/config";
 
 // Aplica el tema guardado antes del primer paint para evitar flash
@@ -13,11 +14,11 @@ export default async function PublicLayout({
   const config = await getConfig();
 
   return (
-    <>
+    <RecaptchaProvider>
       <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       <Navbar />
       <main>{children}</main>
       <Footer config={config} />
-    </>
+    </RecaptchaProvider>
   );
 }

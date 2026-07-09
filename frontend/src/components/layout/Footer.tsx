@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import type { SiteConfig } from "@/data/config";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -8,58 +7,46 @@ export default function Footer({ config }: { config: SiteConfig }) {
   const { t } = useLanguage();
   const year = new Date().getFullYear();
 
-  const socials = [
-    { label: "GitHub", href: config.social_github },
-    { label: "LinkedIn", href: config.social_linkedin },
-    { label: "Twitter / X", href: config.social_twitter },
-  ].filter((social) => social.href);
+  const email = config.site_email || "arturados@gmail.com";
+  const links = [
+    {
+      label: "LinkedIn",
+      href: config.social_linkedin || "https://www.linkedin.com/in/arturo-vasquez/",
+      external: true,
+    },
+    {
+      label: "GitHub",
+      href: config.social_github || "https://github.com/Arturado",
+      external: true,
+    },
+    { label: email, href: `mailto:${email}`, external: false },
+  ];
 
   return (
     <footer className="footer">
-      <div className="footer-monogram">AV</div>
-
-      <div className="footer-grid">
-        <div className="footer-col">
-          <h4>Arturo Vasquez</h4>
-          <p>{t("hero.subtitle")}</p>
-          {config.site_location && <p>{config.site_location}</p>}
-        </div>
-
-        <div className="footer-col">
-          <h4>{t("nav.work")}</h4>
-          <Link href="/#work">{t("nav.work")}</Link>
-          <Link href="/#stack">{t("nav.stack")}</Link>
-          <Link href="/#experiencia">{t("nav.experience")}</Link>
-          <Link href="/curriculum">{t("nav.resume")}</Link>
-        </div>
-
-        <div className="footer-col">
-          <h4>{t("nav.journal")}</h4>
-          <Link href="/#blog">{t("nav.journal")}</Link>
-          <Link href="/#contacto">{t("nav.contact")}</Link>
-        </div>
-
-        <div className="footer-col">
-          <h4>Social</h4>
-          {socials.map((social) => (
+      <div className="footer-bar" style={{ marginTop: 0 }}>
+        <span>© {year} Arturo Vasquez</span>
+        <nav className="flex flex-wrap gap-x-6 gap-y-2">
+          {links.map((link) => (
             <a
-              key={social.label}
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
+              key={link.label}
+              href={link.href}
+              target={link.external ? "_blank" : undefined}
+              rel={link.external ? "noopener noreferrer" : undefined}
+              className="transition-colors duration-200"
+              style={{ textTransform: "none" }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "var(--primary-color)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "";
+              }}
             >
-              {social.label}
+              {link.label}
             </a>
           ))}
-          {config.site_email && (
-            <a href={`mailto:${config.site_email}`}>{config.site_email}</a>
-          )}
-        </div>
-      </div>
-
-      <div className="footer-bar">
-        <span>© {year} Arturo Vasquez</span>
-        <span>{t("footer.built")}</span>
+        </nav>
+        <span>{t("footer.credit")}</span>
       </div>
     </footer>
   );

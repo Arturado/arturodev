@@ -59,9 +59,25 @@
   "projects.back": "← Volver al portfolio",
   "projects.empty": "No hay proyectos todavía",
 
-  "experience.pre": "04 / TRAYECTORIA",
+  "experience.pre": "03 / Trayectoria",
   "experience.title": "Experiencia",
   "experience.title.em": "laboral",
+  "experience.empty": "Sin experiencia cargada todavía",
+
+  "blog.pre": "04 / Blog",
+  "blog.title": "Del",
+  "blog.title.em": "blog",
+  "blog.lede": "Notas sobre desarrollo, e-commerce y automatización.",
+  "blog.readmore": "Leer más",
+  "blog.empty": "No hay posts todavía",
+  "blog.back": "← Volver al blog",
+
+  "project.back": "← Volver a Work",
+
+  "curriculum.title": "Curriculum Vitae",
+  "curriculum.download": "Descargar PDF",
+
+  "footer.credit": "Diseñado y desarrollado por Arturo Vasquez",
 
   "journal.pre": "05 / BLOG",
   "journal.title": "Del",
@@ -69,7 +85,10 @@
   "journal.lede": "Notas sobre desarrollo, producto y lo que sea que me esté ocupando.",
   "journal.readmore": "Leer más",
 
-  "contact.pre": "06 / CONTACTO",
+  "contact.pre": "05 / Contacto",
+  "contact.sending": "Enviando...",
+  "contact.success": "¡Mensaje enviado! Te respondo pronto.",
+  "contact.error": "Hubo un error al enviar. Intentá de nuevo o escribime por email.",
   "contact.title": "Trabajemos",
   "contact.title.em": "juntos",
   "contact.lede": "Disponible para proyectos freelance, consultoría y posiciones part-time.",
