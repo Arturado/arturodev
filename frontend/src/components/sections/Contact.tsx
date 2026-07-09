@@ -76,43 +76,37 @@ export default function Contact({ config }: { config: SiteConfig }) {
             transition={{ duration: 0.7, ease: EASE }}
           >
             <div className="form-field">
+              <label htmlFor="contact-name">{t("contact.name")}</label>
               <input
                 id="contact-name"
                 name="name"
                 type="text"
-                placeholder=" "
                 required
                 value={form.name}
                 onChange={handleChange}
               />
-              <label htmlFor="contact-name">{t("contact.name")}</label>
-              <span className="form-field-num">01</span>
             </div>
             <div className="form-field">
+              <label htmlFor="contact-email">{t("contact.email")}</label>
               <input
                 id="contact-email"
                 name="email"
                 type="email"
-                placeholder=" "
                 required
                 value={form.email}
                 onChange={handleChange}
               />
-              <label htmlFor="contact-email">{t("contact.email")}</label>
-              <span className="form-field-num">02</span>
             </div>
             <div className="form-field">
+              <label htmlFor="contact-message">{t("contact.message")}</label>
               <textarea
                 id="contact-message"
                 name="message"
-                placeholder=" "
                 required
                 rows={4}
                 value={form.message}
                 onChange={handleChange}
               />
-              <label htmlFor="contact-message">{t("contact.message")}</label>
-              <span className="form-field-num">03</span>
             </div>
 
             <div className="form-actions">
@@ -167,30 +161,29 @@ export default function Contact({ config }: { config: SiteConfig }) {
             <a href={`mailto:${email}`} className="contact-mail">
               {email}
             </a>
-            <div className="mb-8 flex flex-wrap gap-3">
-              {[
-                { label: "LinkedIn", href: linkedin },
-                { label: "GitHub", href: github },
-              ].map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-full border px-5 py-2.5 text-sm transition-colors duration-300"
-                  style={{ borderColor: "var(--line-strong)" }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "var(--primary-color)";
-                    e.currentTarget.style.color = "var(--primary-color)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "var(--line-strong)";
-                    e.currentTarget.style.color = "";
-                  }}
-                >
-                  {social.label} ↗
-                </a>
-              ))}
+            <div className="mb-8 flex flex-col">
+              <a
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-social"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.22 8.16h4.56V23H.22V8.16zM8.34 8.16h4.37v2.02h.06c.61-1.15 2.1-2.37 4.32-2.37 4.62 0 5.47 3.04 5.47 6.99V23h-4.55v-7.21c0-1.72-.03-3.93-2.4-3.93-2.4 0-2.77 1.87-2.77 3.8V23H8.34V8.16z" />
+                </svg>
+                LinkedIn
+              </a>
+              <a
+                href={github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-social"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.28-.01-1.04-.02-2.04-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.77.42-1.3.76-1.6-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.17 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.24 2.87.12 3.17.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.81 1.1.81 2.22 0 1.6-.02 2.89-.02 3.29 0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+                GitHub
+              </a>
             </div>
             <div className="contact-meta">
               <div>

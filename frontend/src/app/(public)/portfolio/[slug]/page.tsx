@@ -177,7 +177,7 @@ export default async function ProjectPage({ params }: Props) {
       <div className="mt-16 border-t pt-8" style={{ borderColor: "var(--line)" }}>
         <Link
           href="/#work"
-          className="inline-flex items-center gap-2 transition-colors hover:text-[var(--primary-color)]"
+          className="inline-flex items-center gap-2 transition-colors hover:text-[var(--fg)]"
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: 13,

@@ -14,30 +14,17 @@ const links = [
   { key: "nav.contact", href: "/#contacto" },
 ] as const;
 
-type Theme = "dark" | "light";
-
 export default function Navbar() {
   const { t, locale, setLocale } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
-  const [theme, setTheme] = useState<Theme>("dark");
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("theme");
-    if (saved === "light" || saved === "dark") setTheme(saved);
-
     const onScroll = () => setScrolled(window.scrollY > 10);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const toggleTheme = () => {
-    const next: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
-  };
 
   const toggleLocale = () => setLocale(locale === "es" ? "en" : "es");
 
@@ -72,11 +59,6 @@ export default function Navbar() {
           >
             {locale === "es" ? "EN" : "ES"}
           </button>
-          <button
-            className="theme-toggle"
-            onClick={toggleTheme}
-            aria-label={theme === "dark" ? "Tema claro" : "Tema oscuro"}
-          />
           <Link href="/#contacto" className="nav-cta">
             {t("nav.cta")} <span className="arrow">→</span>
           </Link>

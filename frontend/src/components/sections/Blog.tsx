@@ -23,7 +23,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
     });
 
   return (
-    <section id="blog">
+    <section id="blog" className="section-light">
       <div className="container">
         <motion.div
           className="section-head"
@@ -66,6 +66,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
                 <motion.article
                   key={post.id}
                   className="post"
+                  whileHover={{ y: -2 }}
                   variants={{
                     hidden: { opacity: 0, y: 40 },
                     visible: {

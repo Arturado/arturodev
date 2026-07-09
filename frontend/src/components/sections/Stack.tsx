@@ -63,7 +63,7 @@ export default function Stack() {
   const { t } = useLanguage();
 
   return (
-    <section id="stack">
+    <section id="stack" className="section-light">
       <div className="container">
         <motion.div
           className="section-head"
@@ -102,8 +102,8 @@ export default function Stack() {
                   },
                 },
               }}
-              className="flex flex-col gap-5 rounded-[var(--radius-card)] border p-7"
-              style={{ borderColor: "var(--line)", background: "var(--bg-elev)" }}
+              whileHover={{ y: -1 }}
+              className="card-light flex flex-col gap-5 p-7"
             >
               <div className="flex items-baseline justify-between">
                 <h3
@@ -139,19 +139,13 @@ export default function Stack() {
                         transition: { duration: 0.4, ease: EASE },
                       },
                     }}
-                    className="group flex items-center gap-2.5 rounded-full border py-2 pl-2.5 pr-4 transition-colors duration-300"
-                    style={{ borderColor: "var(--line)" }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = "var(--primary-color)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = "var(--line)";
-                    }}
+                    className="flex items-center gap-2.5 rounded-full py-2 pl-2.5 pr-4"
+                    style={{ background: "rgba(0,0,0,0.05)" }}
                   >
                     <span
                       className="flex h-7 w-7 items-center justify-center rounded-full"
                       style={{
-                        background: "var(--bg-elev-2)",
+                        background: "var(--bg-light-elev)",
                         fontFamily: "var(--font-mono)",
                         fontSize: 10,
                         color: "var(--primary-color)",
@@ -159,7 +153,7 @@ export default function Stack() {
                     >
                       {tech.glyph}
                     </span>
-                    <span className="text-sm" style={{ color: "var(--fg-mute)" }}>
+                    <span className="text-sm" style={{ color: "var(--fg-dark-mute)" }}>
                       {tech.name}
                     </span>
                   </motion.div>

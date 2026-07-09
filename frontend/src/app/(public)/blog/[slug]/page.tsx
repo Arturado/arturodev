@@ -35,8 +35,9 @@ export default async function PostPage({ params }: Props) {
   });
 
   return (
-    <article className="container pb-24 pt-36">
-      <div className="mx-auto max-w-[760px]">
+    <div className="page-light">
+      <article className="container pb-24 pt-36">
+        <div className="mx-auto max-w-[760px]">
         {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
@@ -79,7 +80,7 @@ export default async function PostPage({ params }: Props) {
           <h1
             style={{
               fontFamily: "var(--font-display)",
-              fontWeight: 800,
+              fontWeight: 700,
               fontSize: "clamp(34px, 5.5vw, 64px)",
               lineHeight: 1.02,
               letterSpacing: "-0.03em",
@@ -122,7 +123,7 @@ export default async function PostPage({ params }: Props) {
         <div className="mt-16 border-t pt-8" style={{ borderColor: "var(--line)" }}>
           <Link
             href="/#blog"
-            className="inline-flex items-center gap-2 transition-colors hover:text-[var(--primary-color)]"
+            className="inline-flex items-center gap-2 transition-colors hover:text-[var(--fg)]"
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: 13,
@@ -133,7 +134,8 @@ export default async function PostPage({ params }: Props) {
             ← Blog
           </Link>
         </div>
-      </div>
-    </article>
+        </div>
+      </article>
+    </div>
   );
 }

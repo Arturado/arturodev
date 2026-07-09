@@ -103,6 +103,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
         borderColor: "var(--line)",
         fontFamily: "var(--font-mono)",
         fontSize: 12,
+        fontWeight: 600,
         letterSpacing: "0.14em",
         textTransform: "uppercase",
         color: "var(--primary-color)",
@@ -115,7 +116,8 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 export default function CurriculumPage() {
   return (
-    <div className="container pb-24 pt-36">
+    <div className="page-light">
+      <div className="container pb-24 pt-36">
       <style>{`
         @media print {
           .nav, .footer, .cv-noprint, .grain, .cursor-dot, .cursor-ring { display: none !important; }
@@ -139,20 +141,18 @@ export default function CurriculumPage() {
         >
           Curriculum Vitae
         </h1>
-        <a
-          href="/Arturo-Vasquez-CV.pdf"
-          download
-          className="inline-flex items-center gap-3 rounded-full px-7 py-4 text-sm font-medium transition-transform duration-300 hover:translate-x-1"
-          style={{ background: "var(--fg)", color: "var(--bg)" }}
-        >
+        <a href="/Arturo-Vasquez-CV.pdf" download className="btn-dark">
           Descargar PDF <span aria-hidden>↓</span>
         </a>
       </div>
 
       {/* Documento */}
       <article
-        className="cv-sheet mx-auto max-w-[880px] rounded-[var(--radius-card)] border px-8 py-12 md:px-14"
-        style={{ borderColor: "var(--line)", background: "var(--bg-elev)" }}
+        className="cv-sheet mx-auto max-w-[880px] rounded-xl px-8 py-12 md:px-14"
+        style={{
+          background: "var(--bg-light-elev)",
+          boxShadow: "0 4px 32px rgba(0,0,0,0.10)",
+        }}
       >
         <header className="mb-4">
           <h2
@@ -279,7 +279,8 @@ export default function CurriculumPage() {
             <li key={course}>{course}</li>
           ))}
         </ul>
-      </article>
+        </article>
+      </div>
     </div>
   );
 }

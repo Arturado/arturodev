@@ -53,12 +53,11 @@ export default function Experience({ items }: { items: ExperienceItem[] }) {
                 >
                   <div className="tl-side tl-meta">
                     <div className="tl-date">{item.period}</div>
-                    <div className="tl-place">
-                      {item.company} · {item.location}
-                    </div>
+                    <div className="tl-place">{item.location}</div>
                   </div>
                   <div className="tl-side tl-card">
-                    <h3 className="tl-title">{item.role}</h3>
+                    <h3 className="tl-title">{item.company}</h3>
+                    <div className="tl-role">{item.role}</div>
                     <p className="tl-desc">{item.description}</p>
                     {item.techs.length > 0 && (
                       <div className="tl-tags">
