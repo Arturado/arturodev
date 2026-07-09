@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import type { Post } from "@/data/posts";
+import type { SiteConfig } from "@/data/config";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const EASE = [0.2, 0.8, 0.2, 1] as const;
@@ -11,9 +12,17 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 }
 
-export default function Blog({ posts }: { posts: Post[] }) {
+export default function Blog({
+  posts,
+  config,
+}: {
+  posts: Post[];
+  config?: SiteConfig;
+}) {
   const { t, locale } = useLanguage();
   const latest = posts.filter((post) => post.published).slice(0, 3);
+
+  if (config?.show_blog === "false") return null;
 
   const formatDate = (iso: string) =>
     new Date(iso).toLocaleDateString(locale === "es" ? "es-ES" : "en-US", {

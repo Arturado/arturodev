@@ -2,13 +2,22 @@
 
 import { motion } from "motion/react";
 import type { Experience as ExperienceItem } from "@/data/experience";
+import type { SiteConfig } from "@/data/config";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const EASE = [0.2, 0.8, 0.2, 1] as const;
 
-export default function Experience({ items }: { items: ExperienceItem[] }) {
+export default function Experience({
+  items,
+  config,
+}: {
+  items: ExperienceItem[];
+  config?: SiteConfig;
+}) {
   const { t } = useLanguage();
   const work = items.filter((item) => item.published);
+
+  if (config?.show_experience === "false") return null;
 
   return (
     <section id="experiencia">

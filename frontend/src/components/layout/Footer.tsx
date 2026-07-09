@@ -32,6 +32,14 @@ export default function Footer({ config }: { config: SiteConfig }) {
     { label: email, href: `mailto:${email}`, external: false },
   ];
 
+  if (config.social_twitter) {
+    socials.splice(2, 0, {
+      label: "Twitter / X",
+      href: config.social_twitter,
+      external: true,
+    });
+  }
+
   return (
     <footer className="footer">
       <div className="footer-grid">

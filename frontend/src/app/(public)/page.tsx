@@ -1,4 +1,4 @@
-import Hero from "@/components/sections/Hero";
+import HeroSlider from "@/components/sections/HeroSlider";
 import Work from "@/components/sections/Work";
 import Stack from "@/components/sections/Stack";
 import Experience from "@/components/sections/Experience";
@@ -8,22 +8,24 @@ import { getProjects } from "@/data/projects";
 import { getExperience } from "@/data/experience";
 import { getPosts } from "@/data/posts";
 import { getConfig } from "@/data/config";
+import { getHeroSlides } from "@/data/heroSlides";
 
 export default async function HomePage() {
-  const [projects, experience, posts, config] = await Promise.all([
+  const [projects, experience, posts, config, slides] = await Promise.all([
     getProjects(),
     getExperience(),
     getPosts(),
     getConfig(),
+    getHeroSlides(),
   ]);
 
   return (
     <>
-      <Hero />
-      <Work projects={projects} />
+      <HeroSlider slides={slides} config={config} />
+      <Work projects={projects} config={config} />
       <Stack />
-      <Experience items={experience} />
-      <Blog posts={posts} />
+      <Experience items={experience} config={config} />
+      <Blog posts={posts} config={config} />
       <Contact config={config} />
     </>
   );

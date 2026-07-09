@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
 import type { Project } from "@/data/projects";
+import type { SiteConfig } from "@/data/config";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const EASE = [0.2, 0.8, 0.2, 1] as const;
@@ -115,8 +116,16 @@ function ProjectCard({ project }: { project: Project }) {
   );
 }
 
-export default function Work({ projects }: { projects: Project[] }) {
+export default function Work({
+  projects,
+  config,
+}: {
+  projects: Project[];
+  config?: SiteConfig;
+}) {
   const { t } = useLanguage();
+
+  if (config?.show_portfolio === "false") return null;
 
   return (
     <section id="work">
