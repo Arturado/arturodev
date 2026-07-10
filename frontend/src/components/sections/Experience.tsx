@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import type { Experience as ExperienceItem } from "@/data/experience";
 import type { SiteConfig } from "@/data/config";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { pick } from "@/utils/i18n";
 
 const EASE = [0.2, 0.8, 0.2, 1] as const;
 
@@ -14,7 +15,7 @@ export default function Experience({
   items: ExperienceItem[];
   config?: SiteConfig;
 }) {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const work = items.filter((item) => item.published);
 
   if (config?.show_experience === "false") return null;
@@ -51,6 +52,10 @@ export default function Experience({
           <div className="timeline">
             {work.map((item, i) => {
               const side = i % 2 === 0 ? "right" : "left";
+              const role = pick(item.role, item.roleEn, locale);
+              const company = pick(item.company, item.companyEn, locale);
+              const location = pick(item.location, item.locationEn, locale);
+              const description = pick(item.description, item.descriptionEn, locale);
               return (
                 <motion.div
                   key={item.id}
@@ -62,12 +67,12 @@ export default function Experience({
                 >
                   <div className="tl-side tl-meta">
                     <div className="tl-date">{item.period}</div>
-                    <div className="tl-place">{item.location}</div>
+                    <div className="tl-place">{location}</div>
                   </div>
                   <div className="tl-side tl-card">
-                    <h3 className="tl-title">{item.company}</h3>
-                    <div className="tl-role">{item.role}</div>
-                    <p className="tl-desc">{item.description}</p>
+                    <h3 className="tl-title">{company}</h3>
+                    <div className="tl-role">{role}</div>
+                    <p className="tl-desc">{description}</p>
                     {item.techs.length > 0 && (
                       <div className="tl-tags">
                         {item.techs.map((tech) => (

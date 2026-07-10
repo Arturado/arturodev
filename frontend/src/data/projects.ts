@@ -2,8 +2,11 @@ export type Project = {
   id: string;
   slug: string;
   name: string;
+  nameEn?: string;
   description: string;
+  descriptionEn?: string;
   longDescription: string;
+  longDescriptionEn?: string;
   techs: string[];
   image: string;
   liveUrl?: string;

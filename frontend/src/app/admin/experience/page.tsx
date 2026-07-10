@@ -24,10 +24,14 @@ type Experience = {
   id: string;
   type: string;
   role: string;
+  roleEn: string;
   company: string;
+  companyEn: string;
   location: string;
+  locationEn: string;
   period: string;
   description: string;
+  descriptionEn: string;
   highlights: string[];
   techs: string[];
   published: boolean;
@@ -36,10 +40,14 @@ type Experience = {
 const empty: Omit<Experience, "id"> = {
   type: "work",
   role: "",
+  roleEn: "",
   company: "",
+  companyEn: "",
   location: "",
+  locationEn: "",
   period: "",
   description: "",
+  descriptionEn: "",
   highlights: [],
   techs: [],
   published: true,
@@ -122,6 +130,10 @@ export default function AdminExperience() {
   const handleEdit = (item: Experience) => {
     setForm({
       ...item,
+      roleEn: item.roleEn ?? "",
+      companyEn: item.companyEn ?? "",
+      locationEn: item.locationEn ?? "",
+      descriptionEn: item.descriptionEn ?? "",
       highlights: Array.isArray(item.highlights) ? item.highlights : [],
       techs: Array.isArray(item.techs) ? item.techs : [],
     });
@@ -188,12 +200,42 @@ export default function AdminExperience() {
                 />
               </div>
             ))}
+
+            <div className="md:col-span-2 border-t border-gray-800 pt-4">
+              <span className="text-violet-400 text-xs font-mono uppercase tracking-wide">Campos en inglés (opcionales)</span>
+            </div>
+
+            {[
+              { key: "roleEn", label: "Rol / Título (EN)", placeholder: "Full Stack Developer" },
+              { key: "companyEn", label: "Empresa / Institución (EN)", placeholder: "Acme Corp" },
+              { key: "locationEn", label: "Ubicación (EN)", placeholder: "Santiago, Chile" },
+            ].map(({ key, label, placeholder }) => (
+              <div key={key}>
+                <label className="text-gray-600 text-xs font-mono mb-1 block">{label}</label>
+                <input
+                  value={(form as any)[key]}
+                  onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                  placeholder={placeholder}
+                  className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors"
+                />
+              </div>
+            ))}
+
             <div className="md:col-span-2">
               <label className="text-gray-600 text-xs font-mono mb-1 block">Descripción</label>
               <input
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 placeholder="Descripción breve del rol..."
+                className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="text-gray-600 text-xs font-mono mb-1 block">Descripción (EN)</label>
+              <input
+                value={form.descriptionEn}
+                onChange={(e) => setForm({ ...form, descriptionEn: e.target.value })}
+                placeholder="Short description of the role..."
                 className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors"
               />
             </div>

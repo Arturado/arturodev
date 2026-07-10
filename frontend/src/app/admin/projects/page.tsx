@@ -125,7 +125,12 @@ export default function AdminProjects() {
   };
 
   const handleEdit = (p: Project) => {
-    setForm({ ...p });
+    setForm({
+      ...p,
+      nameEn: p.nameEn ?? "",
+      descriptionEn: p.descriptionEn ?? "",
+      longDescriptionEn: p.longDescriptionEn ?? "",
+    });
     setEditing(p.id);
     setShowForm(true);
   };
@@ -212,8 +217,12 @@ export default function AdminProjects() {
               />
             </div>
             <div className="md:col-span-2">
-              <label className="text-gray-600 text-xs font-mono mb-1 block">Descripción larga</label>
+              <label className="text-gray-600 text-xs font-mono mb-1 block">Descripción larga (ES)</label>
               <RichTextEditor value={form.longDescription} onChange={(v) => setForm({ ...form, longDescription: v })} />
+            </div>
+            <div className="md:col-span-2 border-t border-gray-800 pt-4">
+              <label className="text-gray-600 text-xs font-mono mb-1 block">Descripción larga (EN)</label>
+              <RichTextEditor value={form.longDescriptionEn} onChange={(v) => setForm({ ...form, longDescriptionEn: v })} />
             </div>
             <div className="md:col-span-2 flex items-center gap-3">
               <input

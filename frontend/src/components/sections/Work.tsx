@@ -6,11 +6,14 @@ import { motion } from "motion/react";
 import type { Project } from "@/data/projects";
 import type { SiteConfig } from "@/data/config";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { pick } from "@/utils/i18n";
 
 const EASE = [0.2, 0.8, 0.2, 1] as const;
 
 function ProjectCard({ project }: { project: Project }) {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const name = pick(project.name, project.nameEn, locale);
+  const description = pick(project.description, project.descriptionEn, locale);
 
   return (
     <motion.article
@@ -26,7 +29,7 @@ function ProjectCard({ project }: { project: Project }) {
           {project.image ? (
             <Image
               src={project.image}
-              alt={project.name}
+              alt={name}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
@@ -42,7 +45,7 @@ function ProjectCard({ project }: { project: Project }) {
                 letterSpacing: "0.1em",
               }}
             >
-              [ {project.name} ]
+              [ {name} ]
             </div>
           )}
 
@@ -87,10 +90,10 @@ function ProjectCard({ project }: { project: Project }) {
               lineHeight: 1.1,
             }}
           >
-            {project.name}
+            {name}
           </h3>
           <p className="text-sm" style={{ color: "var(--fg-mute)" }}>
-            {project.description}
+            {description}
           </p>
           <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
             {project.techs.map((tech) => (

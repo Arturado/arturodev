@@ -2,10 +2,14 @@ export type Experience = {
   id: string;
   type: string;
   role: string;
+  roleEn?: string;
   company: string;
+  companyEn?: string;
   location: string;
+  locationEn?: string;
   period: string;
   description: string;
+  descriptionEn?: string;
   highlights: string[];
   techs: string[];
   published: boolean;
