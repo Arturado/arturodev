@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "motion/react";
 import type { Experience as ExperienceItem } from "@/data/experience";
 import type { SiteConfig } from "@/data/config";
@@ -17,6 +18,8 @@ export default function Experience({
 }) {
   const { t, locale } = useLanguage();
   const work = items.filter((item) => item.published);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const toggle = (id: string) => setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
 
   if (config?.show_experience === "false") return null;
 
@@ -72,7 +75,31 @@ export default function Experience({
                   <div className="tl-side tl-card">
                     <h3 className="tl-title">{company}</h3>
                     <div className="tl-role">{role}</div>
-                    <p className="tl-desc">{description}</p>
+                    <motion.p
+                      layout
+                      transition={{ duration: 0.35, ease: EASE }}
+                      className={`tl-desc ${expanded[item.id] ? "" : "line-clamp-2"}`}
+                      style={{ overflow: "hidden" }}
+                    >
+                      {description}
+                    </motion.p>
+                    {description.length > 120 && (
+                      <button
+                        onClick={() => toggle(item.id)}
+                        className="mt-1 inline-block"
+                        style={{
+                          color: "var(--primary-color)",
+                          fontFamily: "var(--font-mono)",
+                          fontSize: 12,
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          padding: 0,
+                        }}
+                      >
+                        {expanded[item.id] ? "Leer menos ↑" : "Leer más →"}
+                      </button>
+                    )}
                     {item.techs.length > 0 && (
                       <div className="tl-tags">
                         {item.techs.map((tech) => (

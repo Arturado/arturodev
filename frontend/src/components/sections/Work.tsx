@@ -25,13 +25,14 @@ function ProjectCard({ project }: { project: Project }) {
       style={{ borderColor: "var(--line)", background: "var(--bg-elev)" }}
     >
       <Link href={`/portfolio/${project.slug}`} className="flex h-full flex-col">
-        <div className="relative aspect-[16/10] overflow-hidden">
+        <div className="relative aspect-[16/9] overflow-hidden">
           {project.image ? (
             <Image
               src={project.image}
               alt={name}
               fill
-              sizes="(max-width: 768px) 100vw, 50vw"
+              quality={90}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
             />
           ) : (
@@ -68,12 +69,12 @@ function ProjectCard({ project }: { project: Project }) {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col gap-3 p-6">
+        <div className="flex flex-1 flex-col gap-2 p-4">
           <div
             className="flex justify-between"
             style={{
               fontFamily: "var(--font-mono)",
-              fontSize: 11,
+              fontSize: 10,
               letterSpacing: "0.08em",
               textTransform: "uppercase",
               color: "var(--fg-faint)",
@@ -85,25 +86,25 @@ function ProjectCard({ project }: { project: Project }) {
             style={{
               fontFamily: "var(--font-display)",
               fontWeight: 700,
-              fontSize: 24,
+              fontSize: 18,
               letterSpacing: "-0.02em",
-              lineHeight: 1.1,
+              lineHeight: 1.15,
             }}
           >
             {name}
           </h3>
-          <p className="text-sm" style={{ color: "var(--fg-mute)" }}>
+          <p className="line-clamp-2 text-sm" style={{ color: "var(--fg-mute)" }}>
             {description}
           </p>
-          <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
-            {project.techs.map((tech) => (
+          <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-2">
+            {project.techs.slice(0, 4).map((tech) => (
               <span
                 key={tech}
-                className="rounded border px-2 py-1"
+                className="rounded border px-1.5 py-0.5"
                 style={{
                   borderColor: "var(--line)",
                   fontFamily: "var(--font-mono)",
-                  fontSize: 10,
+                  fontSize: 9,
                   letterSpacing: "0.06em",
                   textTransform: "uppercase",
                   color: "var(--fg-mute)",
@@ -112,6 +113,18 @@ function ProjectCard({ project }: { project: Project }) {
                 {tech}
               </span>
             ))}
+            {project.techs.length > 4 && (
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 9,
+                  letterSpacing: "0.06em",
+                  color: "var(--fg-faint)",
+                }}
+              >
+                +{project.techs.length - 4} más
+              </span>
+            )}
           </div>
         </div>
       </Link>
@@ -161,7 +174,7 @@ export default function Work({
           </p>
         ) : (
           <motion.div
-            className="grid gap-6 md:grid-cols-2"
+            className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}

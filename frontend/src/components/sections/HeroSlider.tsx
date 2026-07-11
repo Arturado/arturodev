@@ -54,16 +54,12 @@ export default function HeroSlider({
         }}
       />
 
-      {slide?.imageUrl && (
-        <div className="absolute inset-0 -z-10 opacity-20">
-          <Image src={slide.imageUrl} alt="" fill sizes="100vw" priority className="object-cover" />
-        </div>
-      )}
-
       <div className="container relative">
+        <div className={slide ? "grid items-center gap-12 lg:grid-cols-12" : ""}>
         <AnimatePresence mode="wait">
           <motion.div
             key={slide?.id ?? "static"}
+            className={slide ? "lg:col-span-7" : ""}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -24 }}
@@ -90,7 +86,7 @@ export default function HeroSlider({
               style={{
                 fontFamily: "var(--font-display)",
                 fontWeight: 800,
-                fontSize: "clamp(52px, 9vw, 130px)",
+                fontSize: slide ? "clamp(40px, 6vw, 92px)" : "clamp(52px, 9vw, 130px)",
                 lineHeight: 0.95,
                 letterSpacing: "-0.04em",
               }}
@@ -130,6 +126,45 @@ export default function HeroSlider({
             </div>
           </motion.div>
         </AnimatePresence>
+
+        {slide && (
+          <div className="lg:col-span-5">
+            {slide.imageUrl ? (
+              <div
+                className="relative overflow-hidden rounded-[var(--radius-card)] border"
+                style={{ aspectRatio: "4/3", borderColor: "var(--line)" }}
+              >
+                <Image
+                  src={slide.imageUrl}
+                  alt={title}
+                  fill
+                  quality={90}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  style={{ objectFit: "cover" }}
+                  priority
+                />
+              </div>
+            ) : (
+              <div
+                className="relative flex items-center justify-center overflow-hidden rounded-[var(--radius-card)] border"
+                style={{ aspectRatio: "4/3", borderColor: "var(--line)", background: "var(--bg-elev)" }}
+              >
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 12,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--fg-faint)",
+                  }}
+                >
+                  [ {title} ]
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+        </div>
 
         {active.length > 1 && (
           <div className="mt-16 flex items-center gap-3">

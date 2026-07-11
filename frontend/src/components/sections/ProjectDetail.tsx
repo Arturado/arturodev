@@ -80,7 +80,8 @@ export default function ProjectDetail({ project }: { project: Project }) {
             alt={name}
             fill
             priority
-            sizes="(max-width: 1440px) 100vw, 1440px"
+            quality={90}
+            sizes="100vw"
             className="object-cover"
           />
         </div>
