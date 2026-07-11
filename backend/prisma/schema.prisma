@@ -29,16 +29,31 @@ model Project {
 }
 
 model Post {
+  id         String    @id @default(cuid())
+  slug       String    @unique
+  title      String
+  titleEn    String?
+  excerpt    String
+  excerptEn  String?
+  content    String
+  contentEn  String?
+  tags       String[]
+  readTime   String
+  imageUrl   String?
+  published  Boolean   @default(true)
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Category {
   id        String   @id @default(cuid())
+  name      String   @unique
+  nameEn    String?
   slug      String   @unique
-  title     String
-  excerpt   String
-  content   String
-  tags      String[]
-  readTime  String
-  published Boolean  @default(true)
+  posts     Post[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Contact {

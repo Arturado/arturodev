@@ -71,6 +71,10 @@
   "blog.readmore": "Read more",
   "blog.empty": "No posts yet",
   "blog.back": "← Back to blog",
+  "blog.viewall": "View all posts →",
+  "blog.page.title": "Blog",
+  "blog.page.subtitle": "Notes on development, e-commerce and automation",
+  "blog.filter.all": "All",
 
   "project.back": "← Back to Work",
 

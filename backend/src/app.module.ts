@@ -11,6 +11,7 @@ import { ExperienceModule } from './experience/experience.module';
 import { ConfigModule } from './config/config.module';
 import { HeroSlidesModule } from './hero-slides/hero-slides.module';
 import { AboutModule } from './about/about.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AboutModule } from './about/about.module';
     ConfigModule,
     HeroSlidesModule,
     AboutModule,
+    CategoriesModule,
   ],
   providers: [
     {

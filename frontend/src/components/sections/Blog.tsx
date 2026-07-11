@@ -1,10 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
 import type { Post } from "@/data/posts";
 import type { SiteConfig } from "@/data/config";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { pick } from "@/utils/i18n";
 
 const EASE = [0.2, 0.8, 0.2, 1] as const;
 
@@ -69,8 +71,13 @@ export default function Blog({
             variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
           >
             {latest.map((post) => {
+              const title = pick(post.title, post.titleEn, locale);
               const excerpt =
-                post.excerpt || stripHtml(post.content).slice(0, 120);
+                pick(post.excerpt, post.excerptEn, locale) ||
+                stripHtml(post.content).slice(0, 120);
+              const categoryName = post.category
+                ? pick(post.category.name, post.category.nameEn, locale)
+                : post.tags[0] ?? "blog";
               return (
                 <motion.article
                   key={post.id}
@@ -86,13 +93,26 @@ export default function Blog({
                   }}
                 >
                   <Link href={`/blog/${post.slug}`} className="flex h-full flex-col">
-                    <div className="post-cover" data-mock={`[ ${post.tags[0] ?? "post"} ]`} />
+                    {post.imageUrl ? (
+                      <div className="post-cover relative overflow-hidden">
+                        <Image
+                          src={post.imageUrl}
+                          alt={title}
+                          fill
+                          quality={90}
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="post-cover" data-mock={`[ ${post.tags[0] ?? "post"} ]`} />
+                    )}
                     <div className="post-body">
                       <div className="post-meta">
-                        <span className="cat">{post.tags[0] ?? "blog"}</span>
+                        <span className="cat">{categoryName}</span>
                         <span>{formatDate(post.createdAt)}</span>
                       </div>
-                      <h3 className="post-title">{post.title}</h3>
+                      <h3 className="post-title">{title}</h3>
                       <p className="text-sm" style={{ color: "var(--fg-mute)" }}>
                         {excerpt}…
                       </p>
@@ -106,6 +126,21 @@ export default function Blog({
             })}
           </motion.div>
         )}
+
+        <div className="mt-10 flex justify-center">
+          <Link
+            href="/blog"
+            className="transition-colors hover:text-[var(--primary-color)]"
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 13,
+              letterSpacing: "0.06em",
+              color: "var(--fg-mute)",
+            }}
+          >
+            {t("blog.viewall")}
+          </Link>
+        </div>
       </div>
     </section>
   );

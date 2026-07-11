@@ -2,27 +2,42 @@
 
 import { useEffect, useState } from "react";
 import ProtectedRoute from "@/components/admin/ProtectedRoute";
+import ImageUpload from "@/components/admin/ImageUpload";
 import api from "@/lib/api";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+
+type Category = {
+  id: string;
+  name: string;
+  nameEn: string;
+  slug: string;
+};
 
 type Post = {
   id: string;
   slug: string;
   title: string;
+  titleEn: string;
   excerpt: string;
+  excerptEn: string;
   content: string;
+  contentEn: string;
   tags: string[];
   readTime: string;
+  imageUrl: string;
+  categoryId: string;
   published: boolean;
 };
 
 const empty: Omit<Post, "id"> = {
-  slug: "", title: "", excerpt: "", content: "",
-  tags: [], readTime: "5 min", published: true,
+  slug: "", title: "", titleEn: "", excerpt: "", excerptEn: "",
+  content: "", contentEn: "", tags: [], readTime: "5 min",
+  imageUrl: "", categoryId: "", published: true,
 };
 
 export default function AdminPosts() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [form, setForm] = useState<Omit<Post, "id">>(empty);
   const [editing, setEditing] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -33,13 +48,22 @@ export default function AdminPosts() {
     setPosts(res.data);
   };
 
-  useEffect(() => { fetchPosts(); }, []);
+  const fetchCategories = async () => {
+    const res = await api.get("/categories");
+    setCategories(res.data);
+  };
+
+  useEffect(() => { fetchPosts(); fetchCategories(); }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const data = { ...form, tags: typeof form.tags === "string" ? (form.tags as string).split(",").map(t => t.trim()) : form.tags };
+      const data = {
+        ...form,
+        tags: typeof form.tags === "string" ? (form.tags as string).split(",").map(t => t.trim()) : form.tags,
+        categoryId: form.categoryId || null,
+      };
       if (editing) {
         await api.put(`/posts/${editing}`, data);
       } else {
@@ -57,7 +81,14 @@ export default function AdminPosts() {
   };
 
   const handleEdit = (p: Post) => {
-    setForm({ ...p });
+    setForm({
+      ...p,
+      titleEn: p.titleEn ?? "",
+      excerptEn: p.excerptEn ?? "",
+      contentEn: p.contentEn ?? "",
+      imageUrl: p.imageUrl ?? "",
+      categoryId: (p as any).category?.id ?? p.categoryId ?? "",
+    });
     setEditing(p.id);
     setShowForm(true);
   };
@@ -91,8 +122,25 @@ export default function AdminPosts() {
               </div>
             ))}
             <div>
+              <label className="text-gray-600 text-xs font-mono mb-1 block">Categoría</label>
+              <select
+                value={form.categoryId}
+                onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
+                className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors"
+              >
+                <option value="">Sin categoría</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
               <label className="text-gray-600 text-xs font-mono mb-1 block">Tags (separados por coma)</label>
               <input value={Array.isArray(form.tags) ? form.tags.join(", ") : form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value as any })} placeholder="Next.js, React, Backend" className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors" />
+            </div>
+            <div className="md:col-span-2">
+              <label className="text-gray-600 text-xs font-mono mb-1 block">Imagen</label>
+              <ImageUpload value={form.imageUrl} onChange={(url) => setForm({ ...form, imageUrl: url })} />
             </div>
             <div className="md:col-span-2">
               <label className="text-gray-600 text-xs font-mono mb-1 block">Excerpt</label>
@@ -102,6 +150,23 @@ export default function AdminPosts() {
               <label className="text-gray-600 text-xs font-mono mb-1 block">Contenido</label>
               <RichTextEditor value={form.content} onChange={(v) => setForm({ ...form, content: v })} />
             </div>
+
+            <div className="md:col-span-2 border-t border-gray-800 pt-4">
+              <span className="text-violet-400 text-xs font-mono uppercase tracking-wide">Versión EN (opcional)</span>
+            </div>
+            <div className="md:col-span-2">
+              <label className="text-gray-600 text-xs font-mono mb-1 block">Título (EN)</label>
+              <input value={form.titleEn} onChange={(e) => setForm({ ...form, titleEn: e.target.value })} placeholder="My first post" className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors" />
+            </div>
+            <div className="md:col-span-2">
+              <label className="text-gray-600 text-xs font-mono mb-1 block">Extracto (EN)</label>
+              <textarea value={form.excerptEn} onChange={(e) => setForm({ ...form, excerptEn: e.target.value })} rows={3} placeholder="Short summary of the post..." className="w-full bg-gray-800/50 border border-gray-700 focus:border-violet-500 text-gray-300 placeholder-gray-700 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors resize-none" />
+            </div>
+            <div className="md:col-span-2">
+              <label className="text-gray-600 text-xs font-mono mb-1 block">Contenido (EN)</label>
+              <RichTextEditor value={form.contentEn} onChange={(v) => setForm({ ...form, contentEn: v })} />
+            </div>
+
             <div className="md:col-span-2 flex items-center gap-3">
               <input type="checkbox" id="published" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} className="w-4 h-4 accent-violet-500" />
               <label htmlFor="published" className="text-gray-400 text-sm">Publicado</label>
@@ -124,7 +189,7 @@ export default function AdminPosts() {
                 <div className={`w-2 h-2 rounded-full shrink-0 ${p.published ? "bg-green-400" : "bg-gray-600"}`} />
                 <div>
                   <p className="text-white font-medium text-sm">{p.title}</p>
-                  <p className="text-gray-600 text-xs font-mono">{p.slug} · {p.readTime}</p>
+                  <p className="text-gray-600 text-xs font-mono">{p.slug} · {p.readTime}{(p as any).category ? ` · ${(p as any).category.name}` : ""}</p>
                 </div>
                 <div className="flex flex-wrap gap-1">
                   {p.tags.slice(0, 3).map(t => (

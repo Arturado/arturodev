@@ -1,12 +1,25 @@
+export type Category = {
+  id: string;
+  name: string;
+  nameEn?: string;
+  slug: string;
+};
+
 export type Post = {
   id: string;
   slug: string;
   title: string;
+  titleEn?: string;
   excerpt: string;
+  excerptEn?: string;
   content: string;
+  contentEn?: string;
   tags: string[];
   readTime: string;
+  imageUrl?: string;
   published: boolean;
+  category?: Category;
+  categoryId?: string;
   createdAt: string;
 };
 
@@ -32,5 +45,15 @@ export async function getPost(slug: string): Promise<Post | null> {
   } catch (err) {
     console.error('Error fetching post:', err);
     return null;
+  }
+}
+
+export async function getPostsByCategory(categorySlug: string): Promise<Post[]> {
+  try {
+    const res = await fetch(`${API}/posts?category=${categorySlug}`, { cache: 'no-store' });
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
   }
 }
