@@ -12,6 +12,7 @@ import { ConfigModule } from './config/config.module';
 import { HeroSlidesModule } from './hero-slides/hero-slides.module';
 import { AboutModule } from './about/about.module';
 import { CategoriesModule } from './categories/categories.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { CategoriesModule } from './categories/categories.module';
     HeroSlidesModule,
     AboutModule,
     CategoriesModule,
+    CommentsModule,
   ],
   providers: [
     {

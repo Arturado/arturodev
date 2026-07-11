@@ -76,6 +76,21 @@
   "blog.page.subtitle": "Notas sobre desarrollo, e-commerce y automatización",
   "blog.filter.all": "Todos",
 
+  "comments.title": "Comentarios",
+  "comments.empty": "Sé el primero en comentar",
+  "comments.form.title": "Dejá tu comentario",
+  "comments.form.name": "Nombre",
+  "comments.form.email": "Email",
+  "comments.form.content": "Comentario",
+  "comments.form.submit": "Enviar comentario",
+  "comments.form.sending": "Enviando...",
+  "comments.form.success": "¡Gracias! Tu comentario está pendiente de moderación.",
+  "comments.form.error": "Hubo un error al enviar. Intentá de nuevo.",
+
+  "sidebar.categories": "Categorías",
+  "sidebar.social": "Redes sociales",
+  "sidebar.contact.title": "Contacto rápido",
+
   "project.back": "← Volver a Work",
 
   "curriculum.title": "Curriculum Vitae",

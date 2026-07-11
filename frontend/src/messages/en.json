@@ -76,6 +76,21 @@
   "blog.page.subtitle": "Notes on development, e-commerce and automation",
   "blog.filter.all": "All",
 
+  "comments.title": "Comments",
+  "comments.empty": "Be the first to comment",
+  "comments.form.title": "Leave a comment",
+  "comments.form.name": "Name",
+  "comments.form.email": "Email",
+  "comments.form.content": "Comment",
+  "comments.form.submit": "Send comment",
+  "comments.form.sending": "Sending...",
+  "comments.form.success": "Thanks! Your comment is pending moderation.",
+  "comments.form.error": "Something went wrong. Try again.",
+
+  "sidebar.categories": "Categories",
+  "sidebar.social": "Social",
+  "sidebar.contact.title": "Quick contact",
+
   "project.back": "← Back to Work",
 
   "curriculum.title": "Curriculum Vitae",

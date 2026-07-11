@@ -2,11 +2,27 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import type { Post } from "@/data/posts";
+import type { Category, Post } from "@/data/posts";
+import type { SiteConfig } from "@/data/config";
+import type { Comment } from "@/data/comments";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { pick } from "@/utils/i18n";
+import BlogSidebar from "@/components/blog/BlogSidebar";
+import CommentSection from "@/components/blog/CommentSection";
 
-export default function PostDetail({ post }: { post: Post }) {
+export default function PostDetail({
+  post,
+  categories,
+  comments,
+  config,
+  posts,
+}: {
+  post: Post;
+  categories: Category[];
+  comments: Comment[];
+  config: SiteConfig;
+  posts: Post[];
+}) {
   const { locale, t } = useLanguage();
   const title = pick(post.title, post.titleEn, locale);
   const content = pick(post.content, post.contentEn, locale);
@@ -23,7 +39,8 @@ export default function PostDetail({ post }: { post: Post }) {
   return (
     <div className="page-light">
       <article className="container pb-24 pt-36">
-        <div className="mx-auto max-w-[760px]">
+        <div className="grid grid-cols-1 items-start gap-16 lg:grid-cols-[1fr_320px]">
+        <div className="max-w-[760px]">
           {/* Breadcrumb */}
           <nav
             aria-label="Breadcrumb"
@@ -119,6 +136,8 @@ export default function PostDetail({ post }: { post: Post }) {
             </div>
           )}
 
+          <CommentSection postId={post.id} comments={comments} />
+
           <div className="mt-16 border-t pt-8" style={{ borderColor: "var(--line)" }}>
             <Link
               href="/blog"
@@ -133,6 +152,14 @@ export default function PostDetail({ post }: { post: Post }) {
               {t("blog.back")}
             </Link>
           </div>
+        </div>
+
+        <BlogSidebar
+          categories={categories}
+          posts={posts}
+          config={config}
+          activeCategory={post.category?.slug ?? null}
+        />
         </div>
       </article>
     </div>

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPost } from "@/data/posts";
+import { getPost, getPosts } from "@/data/posts";
+import { getCategories } from "@/data/categories";
+import { getCommentsByPost } from "@/data/comments";
+import { getConfig } from "@/data/config";
 import PostDetail from "@/components/sections/PostDetail";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -33,5 +36,21 @@ export default async function PostPage({ params }: Props) {
   const post = await getPost(slug);
   if (!post || !post.published) notFound();
 
-  return <PostDetail post={post} />;
+  const [categories, comments, config, posts] = await Promise.all([
+    getCategories(),
+    getCommentsByPost(post.id),
+    getConfig(),
+    getPosts(),
+  ]);
+  const published = posts.filter((p) => p.published);
+
+  return (
+    <PostDetail
+      post={post}
+      categories={categories}
+      comments={comments}
+      config={config}
+      posts={published}
+    />
+  );
 }
