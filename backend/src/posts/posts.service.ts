@@ -24,13 +24,23 @@ export class PostsService {
   }
 
   create(data: any) {
-    return this.prisma.post.create({ data });
+    const { categoryId, ...rest } = data;
+    return this.prisma.post.create({
+      data: {
+        ...rest,
+        ...(categoryId ? { category: { connect: { id: categoryId } } } : {}),
+      },
+    });
   }
 
   update(id: string, data: any) {
+    const { categoryId, ...rest } = data;
     return this.prisma.post.update({
       where: { id },
-      data,
+      data: {
+        ...rest,
+        ...(categoryId ? { category: { connect: { id: categoryId } } } : { category: { disconnect: true } }),
+      },
     });
   }
 
