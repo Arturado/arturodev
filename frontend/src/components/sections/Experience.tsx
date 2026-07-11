@@ -53,8 +53,7 @@ export default function Experience({
           </p>
         ) : (
           <div className="timeline">
-            {work.map((item, i) => {
-              const side = i % 2 === 0 ? "right" : "left";
+            {work.map((item) => {
               const role = pick(item.role, item.roleEn, locale);
               const company = pick(item.company, item.companyEn, locale);
               const location = pick(item.location, item.locationEn, locale);
@@ -62,52 +61,49 @@ export default function Experience({
               return (
                 <motion.div
                   key={item.id}
-                  className={`tl-node ${side}`}
-                  initial={{ opacity: 0, x: side === "right" ? 48 : -48 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  className="tl-node"
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.7, ease: EASE }}
                 >
-                  <div className="tl-side tl-meta">
-                    <div className="tl-date">{item.period}</div>
-                    <div className="tl-place">{location}</div>
+                  <div className="tl-meta-row">
+                    {item.period} · {location}
                   </div>
-                  <div className="tl-side tl-card">
-                    <h3 className="tl-title">{company}</h3>
-                    <div className="tl-role">{role}</div>
-                    <motion.p
-                      layout
-                      transition={{ duration: 0.35, ease: EASE }}
-                      className={`tl-desc ${expanded[item.id] ? "" : "line-clamp-2"}`}
-                      style={{ overflow: "hidden" }}
+                  <h3 className="tl-title">{company}</h3>
+                  <div className="tl-role">{role}</div>
+                  <motion.p
+                    layout
+                    transition={{ duration: 0.35, ease: EASE }}
+                    className={`tl-desc ${expanded[item.id] ? "" : "line-clamp-2"}`}
+                    style={{ overflow: "hidden" }}
+                  >
+                    {description}
+                  </motion.p>
+                  {description.length > 120 && (
+                    <button
+                      onClick={() => toggle(item.id)}
+                      className="mt-1 inline-block"
+                      style={{
+                        color: "var(--primary-color)",
+                        fontFamily: "var(--font-mono)",
+                        fontSize: 12,
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        padding: 0,
+                      }}
                     >
-                      {description}
-                    </motion.p>
-                    {description.length > 120 && (
-                      <button
-                        onClick={() => toggle(item.id)}
-                        className="mt-1 inline-block"
-                        style={{
-                          color: "var(--primary-color)",
-                          fontFamily: "var(--font-mono)",
-                          fontSize: 12,
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                          padding: 0,
-                        }}
-                      >
-                        {expanded[item.id] ? "Leer menos ↑" : "Leer más →"}
-                      </button>
-                    )}
-                    {item.techs.length > 0 && (
-                      <div className="tl-tags">
-                        {item.techs.map((tech) => (
-                          <span key={tech}>{tech}</span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                      {expanded[item.id] ? "Leer menos ↑" : "Leer más →"}
+                    </button>
+                  )}
+                  {item.techs.length > 0 && (
+                    <div className="tl-tags">
+                      {item.techs.map((tech) => (
+                        <span key={tech}>{tech}</span>
+                      ))}
+                    </div>
+                  )}
                 </motion.div>
               );
             })}
