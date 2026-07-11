@@ -200,7 +200,7 @@ section { padding: var(--section-pad-y) 0; position: relative; }
 .contact-meta div { padding: 6px 0; }
 .form-field { margin-bottom: 16px; }
 .form-field label { display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-faint); margin-bottom: 8px; }
-.form-field input, .form-field textarea {
+.form-field input, .form-field textarea, .form-field select {
   width: 100%;
   background: var(--bg-elev);
   border: 1px solid var(--line);
@@ -213,8 +213,10 @@ section { padding: var(--section-pad-y) 0; position: relative; }
   transition: border-color 0.2s;
 }
 .form-field input::placeholder, .form-field textarea::placeholder { color: var(--fg-faint); }
-.form-field input:focus, .form-field textarea:focus { border-color: var(--primary-color); }
+.form-field input:focus, .form-field textarea:focus, .form-field select:focus { border-color: var(--primary-color); }
 .form-field textarea { min-height: 120px; }
+.form-field select { appearance: none; cursor: pointer; }
+.form-field select option[value=""] { color: var(--fg-faint); }
 .form-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; gap: 16px; flex-wrap: wrap; }
 .captcha-note { font-family: var(--font-mono); font-size: 10px; color: var(--fg-faint); letter-spacing: 0.06em; text-transform: uppercase; }
 .btn-submit { display: inline-flex; align-items: center; gap: 14px; padding: 16px 28px; background: var(--fg); color: var(--bg); border-radius: var(--radius-pill); font-size: 14px; font-weight: 500; transition: background 0.25s var(--ease-out), color 0.25s var(--ease-out), opacity 0.2s; }

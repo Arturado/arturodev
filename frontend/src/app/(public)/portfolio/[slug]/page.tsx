@@ -8,14 +8,23 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = await getProject(slug);
-  if (!project) return { title: "Proyecto no encontrado — Arturo Vasquez" };
+  if (!project) return { title: "Proyecto no encontrado" };
+  const ogImages = project.image
+    ? [{ url: project.image, width: 1200, height: 630 }]
+    : [{ url: "/og-image.png", width: 1200, height: 630 }];
   return {
-    title: `${project.name} — Arturo Vasquez`,
+    title: project.name,
     description: project.description,
     openGraph: {
       title: project.name,
       description: project.description,
-      images: project.image ? [project.image] : undefined,
+      images: ogImages,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.name,
+      description: project.description,
+      images: project.image ? [project.image] : ["/og-image.png"],
     },
   };
 }

@@ -13,6 +13,7 @@ export type Project = {
   repoUrl?: string;
   year: string;
   published: boolean;
+  updatedAt: string;
 };
 
 const API = process.env.API_URL || 'http://127.0.0.1:4000/api';

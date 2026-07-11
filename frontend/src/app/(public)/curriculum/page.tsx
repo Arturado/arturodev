@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Curriculum Vitae — Arturo Vasquez | Full Stack Developer",
+  title: "Curriculum Vitae",
   description:
     "CV de Arturo Vasquez, Desarrollador Full Stack | Ecommerce Architect. +6 años de experiencia en WordPress, WooCommerce, Magento y React.",
 };

@@ -113,6 +113,7 @@
   "contact.lede": "Available for freelance projects, consulting and part-time positions.",
   "contact.name": "Name",
   "contact.email": "Email",
+  "contact.service": "Service",
   "contact.message": "Message",
   "contact.send": "Send message",
   "contact.captcha": "Protected by reCAPTCHA",

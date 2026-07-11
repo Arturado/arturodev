@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import HeroSlider from "@/components/sections/HeroSlider";
 import AboutSection from "@/components/sections/AboutSection";
 import Work from "@/components/sections/Work";
@@ -11,6 +12,12 @@ import { getPosts } from "@/data/posts";
 import { getConfig } from "@/data/config";
 import { getHeroSlides } from "@/data/heroSlides";
 import { getAbout } from "@/data/about";
+
+export const metadata: Metadata = {
+  title: { absolute: "Arturo Vasquez — Full Stack Developer" },
+  description:
+    "Portfolio de Arturo Vasquez, desarrollador Full Stack con +7 años de experiencia en WordPress, React, NestJS y más.",
+};
 
 export default async function HomePage() {
   const [projects, experience, posts, config, slides, about] = await Promise.all([

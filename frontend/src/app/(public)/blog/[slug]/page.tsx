@@ -16,17 +16,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post || !post.published) {
-    return { title: "Post no encontrado — Arturo Vasquez" };
+    return { title: "Post no encontrado" };
   }
   const description = post.excerpt || stripHtml(post.content).slice(0, 160);
+  const ogImages = post.imageUrl
+    ? [{ url: post.imageUrl, width: 1200, height: 630 }]
+    : [{ url: "/og-image.png", width: 1200, height: 630 }];
   return {
-    title: `${post.title} — Arturo Vasquez`,
+    title: post.title,
     description,
     openGraph: {
       title: post.title,
       description,
       type: "article",
-      images: post.imageUrl ? [post.imageUrl] : undefined,
+      publishedTime: post.createdAt,
+      images: ogImages,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description,
+      images: post.imageUrl ? [post.imageUrl] : ["/og-image.png"],
     },
   };
 }

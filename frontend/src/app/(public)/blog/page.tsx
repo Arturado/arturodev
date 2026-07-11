@@ -6,8 +6,8 @@ import { getConfig } from "@/data/config";
 import BlogListing from "@/components/sections/BlogListing";
 
 export const metadata: Metadata = {
-  title: "Blog — Arturo Vasquez",
-  description: "Notas sobre desarrollo, e-commerce y automatización.",
+  title: "Blog",
+  description: "Notas sobre desarrollo web, WordPress, e-commerce y automatización.",
 };
 
 export default async function BlogPage() {

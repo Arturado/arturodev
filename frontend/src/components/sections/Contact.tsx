@@ -5,16 +5,28 @@ import { motion } from "motion/react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import type { SiteConfig } from "@/data/config";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { pick } from "@/utils/i18n";
 
 const EASE = [0.2, 0.8, 0.2, 1] as const;
 
 type Status = "idle" | "loading" | "success" | "error";
 
+const services = [
+  { value: "", label: { es: "¿En qué puedo ayudarte?", en: "How can I help you?" } },
+  { value: "wordpress", label: { es: "Desarrollo WordPress / WooCommerce", en: "WordPress / WooCommerce Development" } },
+  { value: "ecommerce", label: { es: "E-commerce (Magento / Shopify)", en: "E-commerce (Magento / Shopify)" } },
+  { value: "webapp", label: { es: "Aplicación web (React / Next.js)", en: "Web Application (React / Next.js)" } },
+  { value: "api", label: { es: "API / Backend (NestJS / Node.js)", en: "API / Backend (NestJS / Node.js)" } },
+  { value: "automatizacion", label: { es: "Automatización / Integraciones", en: "Automation / Integrations" } },
+  { value: "consultoria", label: { es: "Consultoría técnica", en: "Technical consulting" } },
+  { value: "otro", label: { es: "Otro", en: "Other" } },
+];
+
 export default function Contact({ config }: { config: SiteConfig }) {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const { executeRecaptcha } = useGoogleReCaptcha();
   const [status, setStatus] = useState<Status>("idle");
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", service: "", message: "" });
 
   const email = config.site_email || "arturados@gmail.com";
   const linkedin =
@@ -22,7 +34,7 @@ export default function Contact({ config }: { config: SiteConfig }) {
   const github = config.social_github || "https://github.com/Arturado";
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,14 +46,18 @@ export default function Contact({ config }: { config: SiteConfig }) {
       const recaptchaToken = executeRecaptcha
         ? await executeRecaptcha("contact")
         : "";
+      const serviceLabel = services.find((s) => s.value === form.service)?.label;
+      const message = serviceLabel
+        ? `[${pick(serviceLabel.es, serviceLabel.en, locale)}]\n\n${form.message}`
+        : form.message;
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, recaptchaToken }),
+        body: JSON.stringify({ name: form.name, email: form.email, message, recaptchaToken }),
       });
       if (!res.ok) throw new Error("send failed");
       setStatus("success");
-      setForm({ name: "", email: "", message: "" });
+      setForm({ name: "", email: "", service: "", message: "" });
     } catch {
       setStatus("error");
     }
@@ -96,6 +112,21 @@ export default function Contact({ config }: { config: SiteConfig }) {
                 value={form.email}
                 onChange={handleChange}
               />
+            </div>
+            <div className="form-field">
+              <label htmlFor="contact-service">{t("contact.service")}</label>
+              <select
+                id="contact-service"
+                name="service"
+                value={form.service}
+                onChange={handleChange}
+              >
+                {services.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {pick(s.label.es, s.label.en, locale)}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="form-field">
               <label htmlFor="contact-message">{t("contact.message")}</label>
