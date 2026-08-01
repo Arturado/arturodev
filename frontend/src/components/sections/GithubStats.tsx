@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import anime from "animejs";
+import * as animeModule from "animejs";
 import { GitHubRepo, GitHubStats as GitHubStatsType, getGithubRepos, getGithubStats } from "@/data/github";
 import { useLanguage } from "@/contexts/LanguageContext";
+
+// Resolver compatibilidad ESM / CommonJS de Anime.js en Turbopack
+const anime = (animeModule as { default?: typeof animeModule }).default || animeModule;
 
 function StatCard({ label, value, index }: { label: string; value: string | number; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
