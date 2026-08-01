@@ -1,18 +1,26 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import * as animeModule from "animejs";
 import { GitHubRepo, GitHubStats as GitHubStatsType, getGithubRepos, getGithubStats } from "@/data/github";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-// Resolver compatibilidad ESM / CommonJS de Anime.js en Turbopack
-const anime = (animeModule as { default?: typeof animeModule }).default || animeModule;
+// Cargar animejs de forma compatible con SSR, Turbopack y TypeScript
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let anime: any;
+try {
+  // En Next.js Client Component podemos requerir el módulo CJS directamente
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const animeModule = require("animejs");
+  anime = animeModule.default || animeModule;
+} catch {
+  anime = () => {};
+}
 
 function StatCard({ label, value, index }: { label: string; value: string | number; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (cardRef.current) {
+    if (cardRef.current && typeof anime === "function") {
       anime({
         targets: cardRef.current,
         opacity: [0, 1],
@@ -60,7 +68,7 @@ function RepoCard({ repo, index }: { repo: GitHubRepo; index: number }) {
   const cardRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
-    if (cardRef.current) {
+    if (cardRef.current && typeof anime === "function") {
       anime({
         targets: cardRef.current,
         opacity: [0, 1],
