@@ -130,6 +130,15 @@
   "modal.repo": "GitHub",
   "modal.stack": "Stack",
 
+  "github.pre": "06 / Open Source",
+  "github.title": "GitHub",
+  "github.title.em": "Activity",
+  "github.stats.repos": "Repositories",
+  "github.stats.stars": "Total Stars",
+  "github.stats.forks": "Forks",
+  "github.stats.languages": "Top Languages",
+  "github.projects.title": "Featured Projects",
+
   "common.loading": "Loading...",
   "common.saving": "Saving...",
   "common.error": "Error",

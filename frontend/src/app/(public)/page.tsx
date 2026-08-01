@@ -4,6 +4,7 @@ import AboutSection from "@/components/sections/AboutSection";
 import Work from "@/components/sections/Work";
 import Stack from "@/components/sections/Stack";
 import Experience from "@/components/sections/Experience";
+import GithubStats from "@/components/sections/GithubStats";
 import Blog from "@/components/sections/Blog";
 import Contact from "@/components/sections/Contact";
 import { getProjects } from "@/data/projects";
@@ -36,6 +37,7 @@ export default async function HomePage() {
       <Work projects={projects} config={config} />
       <Stack />
       <Experience items={experience} config={config} />
+      <GithubStats />
       <Blog posts={posts} config={config} />
       <Contact config={config} />
     </>
