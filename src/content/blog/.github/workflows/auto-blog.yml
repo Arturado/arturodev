@@ -1,0 +1,37 @@
+name: Auto Generate Blog Post
+
+on:
+  schedule:
+    # Corre a las 09:00 AM UTC cada 2 días
+    - cron: '0 9 */2 * *'
+  workflow_dispatch: # Permite ejecutarlo manualmente desde la pestaña Actions de GitHub
+
+jobs:
+  generate-post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Generar post con IA
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/generate-blog-post.mjs
+
+      - name: Hacer Commit y Push del nuevo post
+        run: |
+          git config --global user.name 'Arturo Bot Blog'
+          git config --global user.email 'arturados@gmail.com'
+          git add src/content/blog/
+          git commit -m "chore(blog): nuevo post automático generado por IA [skip ci]" || exit 0
+          git push
