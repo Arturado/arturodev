@@ -18,7 +18,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             set -e
-            cd ~/arturodev
+            cd /var/www/arturodev
             git fetch origin
             git reset --hard origin/main
             git clean -fd

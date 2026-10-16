@@ -2,11 +2,15 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const apiKey = process.env.GEMINI_API_KEY;
 const backendUrl = process.env.BACKEND_URL || "https://api.arturodev.info/api";
-const adminEmail = process.env.ADMIN_EMAIL;
-const adminPassword = process.env.ADMIN_PASSWORD;
+const blogApiSecret = process.env.BLOG_API_SECRET;
 
 if (!apiKey) {
   console.error("❌ Error: GEMINI_API_KEY no está configurada.");
+  process.exit(1);
+}
+
+if (!blogApiSecret) {
+  console.error("❌ Error: BLOG_API_SECRET no está configurada.");
   process.exit(1);
 }
 
@@ -18,26 +22,6 @@ const CATEGORIAS = [
   "DevOps & Docker",
   "Buenas Prácticas & Arquitectura"
 ];
-
-// Función para autenticarse en NestJS y obtener el JWT Token
-async function getAuthToken() {
-  if (!adminEmail || !adminPassword) {
-    throw new Error("ADMIN_EMAIL y ADMIN_PASSWORD deben estar configurados.");
-  }
-
-  const res = await fetch(`${backendUrl}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: adminEmail, password: adminPassword }),
-  });
-
-  if (!res.ok) {
-    throw new Error(`Error en Login Backend (${res.status}): ${await res.text()}`);
-  }
-
-  const data = await res.json();
-  return data.access_token || data.token; // Ajusta según la respuesta de tu /auth/login
-}
 
 async function generarPost() {
   const categoria = CATEGORIAS[Math.floor(Math.random() * CATEGORIAS.length)];
@@ -65,22 +49,20 @@ async function generarPost() {
   `;
 
   try {
-    // 1. Obtener Token de Administrador
-    console.log("🔑 Autenticando en el backend...");
-    const token = await getAuthToken();
-
-    // 2. Generar Contenido con Gemini
+    // 1. Generar Contenido con Gemini
+    console.log("🤖 Solicitando generación de contenido a Gemini...");
     const result = await model.generateContent(prompt);
     const postPayload = JSON.parse(result.response.text());
 
     console.log(`📡 Publicando borrador: "${postPayload.title}"...`);
 
-    // 3. Enviar a NestJS (PostsController)
+    // 2. Enviar a NestJS pasando la clave en x-api-key y Bearer (compatibles con ApiKeyGuard)
     const response = await fetch(`${backendUrl}/posts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        "x-api-key": blogApiSecret,
+        "Authorization": `Bearer ${blogApiSecret}`
       },
       body: JSON.stringify(postPayload),
     });
@@ -91,7 +73,7 @@ async function generarPost() {
     }
 
     const savedPost = await response.json();
-    console.log(`✅ ¡Artículo creado en Prisma/BD exitosamente! ID: ${savedPost.id}`);
+    console.log(`✅ ¡Artículo creado en Prisma/BD exitosamente! ID: ${savedPost.id || savedPost.slug}`);
 
   } catch (error) {
     console.error("❌ Error en el proceso:", error);

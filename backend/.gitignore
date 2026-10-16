@@ -12,6 +12,9 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+#archivos
+secret.key
+
 # OS
 .DS_Store
 
