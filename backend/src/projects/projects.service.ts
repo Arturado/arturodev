@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateProjectDto } from './dto/create-project.dto';
+import { UpdateProjectDto } from './dto/update-project.dto';
 
 @Injectable()
 export class ProjectsService {
@@ -18,11 +20,11 @@ export class ProjectsService {
     });
   }
 
-  create(data: any) {
+  create(data: CreateProjectDto) {
     return this.prisma.project.create({ data });
   }
 
-  update(id: string, data: any) {
+  update(id: string, data: UpdateProjectDto) {
     return this.prisma.project.update({
       where: { id },
       data,

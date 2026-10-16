@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostsService {
@@ -23,7 +25,7 @@ export class PostsService {
     });
   }
 
-  create(data: any) {
+  create(data: CreatePostDto) {
     const { categoryId, ...rest } = data;
     return this.prisma.post.create({
       data: {
@@ -33,7 +35,7 @@ export class PostsService {
     });
   }
 
-  update(id: string, data: any) {
+  update(id: string, data: UpdatePostDto) {
     const { categoryId, ...rest } = data;
     return this.prisma.post.update({
       where: { id },

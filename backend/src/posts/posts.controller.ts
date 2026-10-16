@@ -1,6 +1,8 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { JwtOrApiKeyGuard } from '../auth/jwt-or-api-key.guard';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -18,13 +20,13 @@ export class PostsController {
 
   @Post()
   @UseGuards(JwtOrApiKeyGuard)
-  create(@Body() body: any) {
+  create(@Body() body: CreatePostDto) {
     return this.postsService.create(body);
   }
 
   @Put(':id')
   @UseGuards(JwtOrApiKeyGuard)
-  update(@Param('id') id: string, @Body() body: any) {
+  update(@Param('id') id: string, @Body() body: UpdatePostDto) {
     return this.postsService.update(id, body);
   }
 
