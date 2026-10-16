@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { ApiKeyGuard } from '../auth/api-key.guard'; // <-- Importa el nuevo Guard
+import { JwtOrApiKeyGuard } from '../auth/jwt-or-api-key.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -17,19 +17,19 @@ export class PostsController {
   }
 
   @Post()
-  @UseGuards(ApiKeyGuard) // <-- Aplica el Guard para proteger la creación
+  @UseGuards(JwtOrApiKeyGuard)
   create(@Body() body: any) {
     return this.postsService.create(body);
   }
 
   @Put(':id')
-  @UseGuards(ApiKeyGuard)
+  @UseGuards(JwtOrApiKeyGuard)
   update(@Param('id') id: string, @Body() body: any) {
     return this.postsService.update(id, body);
   }
 
   @Delete(':id')
-  @UseGuards(ApiKeyGuard)
+  @UseGuards(JwtOrApiKeyGuard)
   remove(@Param('id') id: string) {
     return this.postsService.remove(id);
   }
