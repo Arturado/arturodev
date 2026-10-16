@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+export const dynamic = "force-dynamic";
 
 async function verifyRecaptcha(token: string): Promise<boolean> {
   try {
@@ -18,6 +18,14 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
 }
 
 export async function POST(req: Request) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.error("RESEND_API_KEY no está definida");
+    return NextResponse.json({ error: "Servicio no disponible" }, { status: 503 });
+  }
+  const resend = new Resend(apiKey);
+  const contactEmail = process.env.CONTACT_EMAIL!;
+
   const { name, email, message, recaptchaToken } = await req.json();
 
   if (!name || !email || !message) {
@@ -43,7 +51,7 @@ export async function POST(req: Request) {
 
     await resend.emails.send({
       from: "Arturo <hola@arturodev.info>",
-      to: process.env.CONTACT_EMAIL!,
+      to: contactEmail,
       subject: `Nuevo mensaje de ${name}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
