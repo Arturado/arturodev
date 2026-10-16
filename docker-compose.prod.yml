@@ -1,8 +1,15 @@
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
   postgres:
     image: pgvector/pgvector:pg16
     container_name: arturodev_db
-    restart: always
+    restart: unless-stopped
+    logging: *logging
     environment:
       POSTGRES_DB: arturodev
       POSTGRES_USER: arturodev_user
@@ -20,35 +27,47 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: arturodev_backend
-    restart: always
+    restart: unless-stopped
+    logging: *logging
     env_file: .env.production
+    environment:
+      PORT: 4000
     depends_on:
       postgres:
         condition: service_healthy
     ports:
       - "127.0.0.1:4010:4000"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:4000/api/config"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        RESEND_API_KEY: ${RESEND_API_KEY}
-        CONTACT_EMAIL: ${CONTACT_EMAIL}
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
         NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: ${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
         NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ${NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
     container_name: arturodev_frontend
-    restart: always
+    restart: unless-stopped
+    logging: *logging
     env_file: .env.production
+    environment:
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     ports:
       - "127.0.0.1:3010:3000"
     mem_limit: 1g
     cpus: "0.5"
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000"]
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3000"]
       interval: 30s
       timeout: 10s
       retries: 3
